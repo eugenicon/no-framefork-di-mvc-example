@@ -13,7 +13,6 @@
             <th>Theme</th>
             <th>Place</th>
             <th>Reporter</th>
-            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -22,15 +21,9 @@
                 <td>${item.id}</td>
                 <td>${item.theme}</td>
                 <td>${item.place}</td>
-                <td>${item.reporter}</td>
-
-                <td class="tr-table-options">
-                    <div class="table-options">
-                        <i class="fas fa-pen" onclick="get('${base}/reports/${item.id}')"></i>
-                        <tag:confirm-button onConfirm="post('${base}/reports/delete/${item.id}')">
-                            <i class="fas fa-times"></i>
-                        </tag:confirm-button>
-                    </div>
+                <td>${item.reporter}
+                    <tag:table-actions edit="${base}/reports/${item.id}"
+                                       delete="${base}/reports/delete/${item.id}"/>
                 </td>
             </tr>
         </c:forEach>

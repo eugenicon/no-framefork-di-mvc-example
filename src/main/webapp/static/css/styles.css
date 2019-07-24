@@ -1,18 +1,18 @@
-.tr-table-options {
-    text-align: right;
-    width: 60px;
-    padding-right: 4px !important;
-    padding-left: 0 !important;
+td:last-of-type {
+    display: flex;
+    justify-content: space-between;
 }
 
 tr .table-options {
-    display: none;
+    display: flex;
+    opacity: 0;
 }
 
 tr:hover .table-options {
-    display: inline;
+    opacity: 1;
 }
 
-.table-options i {
+.table-options > * {
     cursor: pointer;
+    margin: 0 3px;
 }

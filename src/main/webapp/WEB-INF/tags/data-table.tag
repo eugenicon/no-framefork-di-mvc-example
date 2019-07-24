@@ -4,7 +4,7 @@
 
 <c:if test="${!table.isEmpty()}">
     <c:if test="${options}">
-        <div id="${table}-menu">
+        <div id="${table}_menu">
             <button class="btn navbar-light" data-toggle="dropdown" style="padding: 1px 3px;">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -18,12 +18,10 @@
     <script src="${base}/webjars/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="${base}/webjars/datatables/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script>
-        var options = $('#${table} .table-options');
         $('#${table}').dataTable({
-            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-            "columnDefs": [options.length ? { "orderable": false, "targets": -1 } : {}]
+            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
         });
-        var menu = $('#${table}-menu');
+        var menu = $('#${table}_menu');
         if (menu.length) {
             var filter = $('#${table}_filter').children()[0];
             filter.setAttribute('style', 'display: inline-flex;');
