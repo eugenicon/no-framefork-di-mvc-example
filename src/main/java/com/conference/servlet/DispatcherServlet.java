@@ -51,7 +51,8 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
-    private void processUrl(String targetUrl, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    private void processUrl(String url, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        String targetUrl = (url.endsWith(".jsp") ? "/WEB-INF/jsp/" : "") + url;
         if (targetUrl.startsWith("redirect:")) {
             writeRedirectionAttributes(req);
             String redirectUrl = targetUrl.substring(9);

@@ -102,8 +102,13 @@ public class RequestResolver {
                             .map(value -> conversionService.convert(value, parameter.getType()))
                             .orElse(null)
                     ).toArray();
-            String url = (String) controllerMethod.invoke(controller, methodArguments);
-            return (url.endsWith(".jsp") ? "/WEB-INF/jsp/" : "") + url;
+            Object result = controllerMethod.invoke(controller, methodArguments);
+            if (result instanceof View) {
+                View view = ((View) result);
+                view.getAttributes().forEach(req::setAttribute);
+                return view.getUrl();
+            }
+            return String.valueOf(result);
         }
     }
 }

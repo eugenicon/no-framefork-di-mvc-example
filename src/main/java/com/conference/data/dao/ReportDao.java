@@ -13,10 +13,7 @@ public class ReportDao {
             Integer id = data.stream().map(Report::getId).max(Integer::compareTo).orElse(0) + 1;
             entity.setId(id);
         }
-        Report existing = findById(entity.getId());
-        if (existing != null) {
-            data.remove(existing);
-        }
+        removeById(entity.getId());
         data.add(entity);
     }
 
@@ -26,5 +23,12 @@ public class ReportDao {
 
     public Report findById(Integer id) {
         return data.stream().filter(i -> i.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    public void removeById(Integer id) {
+        Report existing = findById(id);
+        if (existing != null) {
+            data.remove(existing);
+        }
     }
 }

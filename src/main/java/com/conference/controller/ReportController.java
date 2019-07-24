@@ -2,11 +2,10 @@ package com.conference.controller;
 
 import com.conference.data.dao.ReportDao;
 import com.conference.data.entity.Report;
+import com.conference.servlet.View;
 import com.conference.servlet.annotation.Controller;
 import com.conference.servlet.annotation.GetMapping;
 import com.conference.servlet.annotation.PostMapping;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ReportController {
@@ -17,9 +16,8 @@ public class ReportController {
     }
 
     @GetMapping("/reports")
-    public String showListPage(HttpServletRequest request) {
-        request.setAttribute("list", reportDao.getAll());
-        return "report/report-list.jsp";
+    public View showListPage() {
+        return View.of("report/report-list.jsp").with("list", reportDao.getAll());
     }
 
     @GetMapping("/reports/add")
@@ -28,14 +26,19 @@ public class ReportController {
     }
 
     @GetMapping("/reports/{id}")
-    public String showEditPage(HttpServletRequest request, Integer id) {
-        request.setAttribute("item", reportDao.findById(id));
-        return "report/report-edit.jsp";
+    public View showEditPage(Integer id) {
+        return View.of("report/report-edit.jsp").with("item", reportDao.findById(id));
     }
 
     @PostMapping("/reports/save")
     public String save(Report report) {
         reportDao.save(report);
+        return "redirect:/reports";
+    }
+
+    @PostMapping("/reports/delete/{id}")
+    public String delete(Integer id) {
+        reportDao.removeById(id);
         return "redirect:/reports";
     }
 }

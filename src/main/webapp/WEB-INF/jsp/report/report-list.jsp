@@ -9,19 +9,29 @@
     <table class="table" id="reports">
         <thead>
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">Theme</th>
-            <th scope="col">Place</th>
-            <th scope="col">Reporter</th>
+            <th>#</th>
+            <th>Theme</th>
+            <th>Place</th>
+            <th>Reporter</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         <c:forEach var="item" items="${list}">
-            <tr ondblclick="location.href+='/${item.id}'">
+            <tr>
                 <td>${item.id}</td>
                 <td>${item.theme}</td>
                 <td>${item.place}</td>
                 <td>${item.reporter}</td>
+
+                <td class="tr-table-options">
+                    <div class="table-options">
+                        <i class="fas fa-pen" onclick="get('${base}/reports/${item.id}')"></i>
+                        <tag:confirm-button onConfirm="post('${base}/reports/delete/${item.id}')">
+                            <i class="fas fa-times"></i>
+                        </tag:confirm-button>
+                    </div>
+                </td>
             </tr>
         </c:forEach>
         </tbody>
