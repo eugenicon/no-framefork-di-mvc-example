@@ -3,6 +3,9 @@ package com.conference.config;
 import com.conference.controller.ErrorController;
 import com.conference.controller.IndexController;
 import com.conference.controller.ReportController;
+import com.conference.converter.ConversionService;
+import com.conference.converter.RequestToReportConverter;
+import com.conference.converter.StringToIntegerConverter;
 import com.conference.data.dao.ReportDao;
 import com.conference.data.entity.Report;
 import com.conference.servlet.RequestResolver;
@@ -22,7 +25,13 @@ public class ComponentConfig {
         ReportDao reportDao = new ReportDao();
         reportDao.save(new Report("Java", "Room 404", "Usernamis Adminos"));
 
-        RequestResolver requestResolver = new RequestResolver();
+        ConversionService conversionService = new ConversionService();
+        StringToIntegerConverter stringToIntegerConverter = new StringToIntegerConverter();
+        RequestToReportConverter requestToReportConverter = new RequestToReportConverter(conversionService);
+        conversionService.register(stringToIntegerConverter);
+        conversionService.register(requestToReportConverter);
+
+        RequestResolver requestResolver = new RequestResolver(conversionService);
         ReportController reportController = new ReportController(reportDao);
         IndexController indexController = new IndexController();
         ErrorController errorController = new ErrorController();

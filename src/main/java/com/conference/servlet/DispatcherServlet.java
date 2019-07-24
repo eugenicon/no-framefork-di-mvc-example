@@ -39,10 +39,19 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private void resolve(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        if (req.getSession().getAttribute(REDIRECT_PARAMS) != null) {
-            readRedirectionAttributes(req);
+        try {
+            if (req.getSession().getAttribute(REDIRECT_PARAMS) != null) {
+                readRedirectionAttributes(req);
+            }
+            String targetUrl = requestResolver.resolve(req);
+            processUrl(targetUrl.isEmpty() ? "redirect:/404" : targetUrl, req, resp);
+        } catch (Exception e) {
+            req.setAttribute("exception", e.getCause() == null ? e : e.getCause());
+            processUrl("redirect:/500", req, resp);
         }
-        String targetUrl = requestResolver.resolve(req);
+    }
+
+    private void processUrl(String targetUrl, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         if (targetUrl.startsWith("redirect:")) {
             writeRedirectionAttributes(req);
             String redirectUrl = targetUrl.substring(9);

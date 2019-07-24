@@ -9,7 +9,9 @@
                 <div class="col-md-12 text-center">
                     <span class="display-1 d-block">500</span>
                     <div class="mb-4 lead">Oops! Something went really wrong...
-                        <div >${exception.getMessage()}</div>
+                        <c:if test="${exception != null}">
+                            <div >${exception.getMessage() == null ? exception : exception.getMessage()}</div>
+                        </c:if>
                     </div>
                     <a href="${base}/" class="btn btn-link">Back to Home</a>
                     <c:if test="${exception != null}">

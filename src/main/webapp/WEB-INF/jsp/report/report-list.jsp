@@ -6,7 +6,7 @@
 <tag:page name="Reports">
     Report list
 
-    <table class="table">
+    <table class="table" id="reports">
         <thead>
         <tr>
             <th scope="col">#</th>
@@ -26,4 +26,8 @@
         </c:forEach>
         </tbody>
     </table>
+
+    <tag:data-table table="reports" options="true">
+        <a class="dropdown-item" href="${base}/reports/add">Add</a>
+    </tag:data-table>
 </tag:page>

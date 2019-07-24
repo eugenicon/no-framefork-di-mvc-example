@@ -10,13 +10,21 @@ public class ReportDao {
 
     public void save(Report entity) {
         if (entity.getId() == null) {
-            Integer id = data.stream().map(Report::getId).min(Integer::compareTo).orElse(0) + 1;
+            Integer id = data.stream().map(Report::getId).max(Integer::compareTo).orElse(0) + 1;
             entity.setId(id);
+        }
+        Report existing = findById(entity.getId());
+        if (existing != null) {
+            data.remove(existing);
         }
         data.add(entity);
     }
 
     public List<Report> getAll() {
         return data;
+    }
+
+    public Report findById(Integer id) {
+        return data.stream().filter(i -> i.getId().equals(id)).findFirst().orElse(null);
     }
 }

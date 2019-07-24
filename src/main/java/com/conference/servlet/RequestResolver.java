@@ -1,5 +1,6 @@
 package com.conference.servlet;
 
+import com.conference.converter.ConversionService;
 import com.conference.servlet.annotation.GetMapping;
 import com.conference.servlet.annotation.PostMapping;
 
@@ -17,14 +18,18 @@ public class RequestResolver {
     private static final String REQUEST_PATH_REGEX = "\\{([^}]+)}";
     private final Map<String, Map<String, ControllerResolver>> mappings = new HashMap<>();
     private final List<BiFunction<Parameter, HttpServletRequest, Object>> argumentProviders = new ArrayList<>();
+    private final ConversionService conversionService;
 
-    public RequestResolver() {
+    public RequestResolver(ConversionService conversionService) {
+        this.conversionService = conversionService;
+
         mappings.put(GetMapping.METHOD, new HashMap<>());
         mappings.put(PostMapping.METHOD, new HashMap<>());
 
         argumentProviders.add((param, req) -> param.getType().equals(HttpServletRequest.class) ? req : null);
         argumentProviders.add((param, req) -> req.getParameter(param.getName()));
         argumentProviders.add((param, req) -> req.getAttribute(param.getName()));
+        argumentProviders.add((param, req) -> conversionService.convert(req, param.getType()));
     }
 
     public void register(List<?> controllers, String contextPath) {
@@ -44,21 +49,16 @@ public class RequestResolver {
         }
     }
 
-    public String resolve(HttpServletRequest req) {
-        try {
-            Map<String, ControllerResolver> registryMap = mappings.get(req.getMethod());
-            if (registryMap != null) {
-                String requestUrl = resolveUrl(req, registryMap.keySet());
-                ControllerResolver resolverRegistry = registryMap.get(requestUrl);
-                if (resolverRegistry != null) {
-                    return resolverRegistry.invokeController(req);
-                }
+    public String resolve(HttpServletRequest req) throws Exception {
+        Map<String, ControllerResolver> registryMap = mappings.get(req.getMethod());
+        if (registryMap != null) {
+            String requestUrl = resolveUrl(req, registryMap.keySet());
+            ControllerResolver resolverRegistry = registryMap.get(requestUrl);
+            if (resolverRegistry != null) {
+                return resolverRegistry.invokeController(req);
             }
-            return "redirect:/404";
-        } catch (Exception e) {
-            req.setAttribute("exception", e.getCause());
-            return "redirect:/500";
         }
+        return "";
     }
 
     private String resolveUrl(HttpServletRequest request, Set<String> keys) {
@@ -98,8 +98,10 @@ public class RequestResolver {
                     .map(parameter -> argumentProviders.stream()
                             .map(p -> p.apply(parameter, req))
                             .filter(Objects::nonNull)
-                            .findFirst().orElse(null))
-                    .toArray();
+                            .findFirst()
+                            .map(value -> conversionService.convert(value, parameter.getType()))
+                            .orElse(null)
+                    ).toArray();
             String url = (String) controllerMethod.invoke(controller, methodArguments);
             return (url.endsWith(".jsp") ? "/WEB-INF/jsp/" : "") + url;
         }

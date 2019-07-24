@@ -5,6 +5,10 @@ public class Report {
     private String theme;
     private String place;
     private String reporter;
+    private String description;
+
+    public Report() {
+    }
 
     public Report(String theme, String place, String reporter) {
         this.theme = theme;
@@ -42,5 +46,13 @@ public class Report {
 
     public void setReporter(String reporter) {
         this.reporter = reporter;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
