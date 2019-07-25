@@ -2,14 +2,12 @@ package com.conference;
 
 
 import com.conference.util.Reflection;
+import com.conference.util.ResourceReader;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -20,6 +18,7 @@ public class ComponentResolver {
     private Map<Class, Object> componentInstances = new HashMap<>();
 
     private ComponentResolver() {
+        componentInstances.put(Properties.class, ResourceReader.getResourceAsProperties("application.properties"));
         List<Class> componentClasses = Reflection.getClasses(getClass().getPackage().getName(), Component.class);
         componentClasses.forEach(c -> resolveComponentInstance(componentClasses, c));
     }
