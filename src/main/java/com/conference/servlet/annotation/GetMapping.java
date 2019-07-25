@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface GetMapping {
-    String METHOD = "GET";
+    String KEY = "GET";
     String value();
 }

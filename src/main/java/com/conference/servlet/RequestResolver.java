@@ -1,16 +1,19 @@
 package com.conference.servlet;
 
 import com.conference.Component;
-import com.conference.converter.ConversionService;
+import com.conference.servlet.annotation.ExceptionMapping;
 import com.conference.servlet.annotation.GetMapping;
 import com.conference.servlet.annotation.PostMapping;
+import com.conference.servlet.resolver.RequestResolution;
+import com.conference.servlet.resolver.Resolver;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.*;
-import java.util.function.BiFunction;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,52 +21,66 @@ import java.util.regex.Pattern;
 @Component
 public class RequestResolver {
     private static final String REQUEST_PATH_REGEX = "\\{([^}]+)}";
-    private final Map<String, Map<String, ControllerResolver>> mappings = new HashMap<>();
-    private final List<BiFunction<Parameter, HttpServletRequest, Object>> argumentProviders = new ArrayList<>();
-    private final ConversionService conversionService;
+    private final Map<String, Map<String, ControllerRegistry>> mappings = new HashMap<>();
+    private final List<Resolver> resolvers;
 
-    public RequestResolver(ConversionService conversionService) {
-        this.conversionService = conversionService;
+    public RequestResolver(List<Resolver> resolvers) {
+        this.resolvers = resolvers;
 
-        mappings.put(GetMapping.METHOD, new HashMap<>());
-        mappings.put(PostMapping.METHOD, new HashMap<>());
-
-        argumentProviders.add((param, req) -> param.getType().equals(HttpServletRequest.class) ? req : null);
-        argumentProviders.add((param, req) -> req.getParameter(param.getName()));
-        argumentProviders.add((param, req) -> req.getAttribute(param.getName()));
-        argumentProviders.add((param, req) -> conversionService.convert(req, param.getType()));
+        mappings.put(GetMapping.KEY, new HashMap<>());
+        mappings.put(PostMapping.KEY, new HashMap<>());
+        mappings.put(ExceptionMapping.KEY, new HashMap<>());
     }
 
     public void register(List<?> controllers, String contextPath) {
         for (Object controller : controllers) {
             for (Method method : controller.getClass().getDeclaredMethods()) {
-                registerMapping(GetMapping.METHOD, GetMapping.class, GetMapping::value, controller, method, contextPath);
-                registerMapping(PostMapping.METHOD, PostMapping.class, PostMapping::value, controller, method, contextPath);
+                registerMapping(GetMapping.KEY, GetMapping.class, a -> contextPath + a.value(), controller, method);
+                registerMapping(PostMapping.KEY, PostMapping.class, a -> contextPath + a.value(), controller, method);
+                registerMapping(ExceptionMapping.KEY, ExceptionMapping.class, a -> getExceptionMappingKey(controller, a.value()), controller, method);
             }
         }
     }
 
-    private <T extends Annotation> void registerMapping(String httpMethod, Class<T> annotationType, Function<T, String> urlSource, Object controller, Method controllerMethod, String contextPath) {
+    private <T extends Annotation> void registerMapping(String httpMethod, Class<T> annotationType, Function<T, String> urlSource, Object controller, Method controllerMethod) {
         T annotation = controllerMethod.getAnnotation(annotationType);
         if (annotation != null) {
-            String urlMapping = contextPath + urlSource.apply(annotation);
-            mappings.get(httpMethod).put(urlMapping, new ControllerResolver(controller, controllerMethod));
+            String urlMapping = urlSource.apply(annotation);
+            mappings.get(httpMethod).put(urlMapping, new ControllerRegistry(controller, controllerMethod));
         }
     }
 
     public String resolve(HttpServletRequest req) throws Exception {
-        Map<String, ControllerResolver> registryMap = mappings.get(req.getMethod());
+        RequestResolution requestResolution = new RequestResolution(req);
+        Map<String, ControllerRegistry> registryMap = mappings.get(req.getMethod());
         if (registryMap != null) {
-            String requestUrl = resolveUrl(req, registryMap.keySet());
-            ControllerResolver resolverRegistry = registryMap.get(requestUrl);
-            if (resolverRegistry != null) {
-                return resolverRegistry.invokeController(req);
+            String requestUrl = getControllerMappingKey(req, registryMap.keySet());
+            ControllerRegistry resolverRegistry = registryMap.get(requestUrl);
+            try {
+                resolveRequest(requestResolution, resolverRegistry, resolvers);
+            } catch (Exception e) {
+                req.setAttribute("exception", e);
+                requestResolution.setException(e);
+                String exceptionKey = getExceptionMappingKey(resolverRegistry.getController(), e.getClass());
+                ControllerRegistry resolver = mappings.get(ExceptionMapping.KEY).get(exceptionKey);
+                resolveRequest(requestResolution, resolver, resolvers);
             }
         }
-        return "";
+
+        return requestResolution.getUrl();
     }
 
-    private String resolveUrl(HttpServletRequest request, Set<String> keys) {
+    private void resolveRequest(RequestResolution requestResolution, ControllerRegistry controllerRegistry, List<? extends Resolver> resolvers) throws Exception {
+        if (controllerRegistry != null) {
+            for (int i = 0; i < resolvers.size() && !requestResolution.isResolved(); i++) {
+                resolvers.get(i).resolve(controllerRegistry, requestResolution);
+            }
+        } else if (requestResolution.hasException()) {
+            throw requestResolution.getException();
+        }
+    }
+
+    private String getControllerMappingKey(HttpServletRequest request, Set<String> keys) {
         String requestURI = request.getRequestURI();
         if (keys.contains(requestURI)) {
             return requestURI;
@@ -86,31 +103,7 @@ public class RequestResolver {
         return "";
     }
 
-    private class ControllerResolver {
-        private final Object controller;
-        private final Method controllerMethod;
-
-        ControllerResolver(Object controller, Method controllerMethod) {
-            this.controller = controller;
-            this.controllerMethod = controllerMethod;
-        }
-
-        String invokeController(HttpServletRequest req) throws Exception {
-            Object[] methodArguments = Arrays.stream(controllerMethod.getParameters())
-                    .map(parameter -> argumentProviders.stream()
-                            .map(p -> p.apply(parameter, req))
-                            .filter(Objects::nonNull)
-                            .findFirst()
-                            .map(value -> conversionService.convert(value, parameter.getType()))
-                            .orElse(null)
-                    ).toArray();
-            Object result = controllerMethod.invoke(controller, methodArguments);
-            if (result instanceof View) {
-                View view = ((View) result);
-                view.getAttributes().forEach(req::setAttribute);
-                return view.getUrl();
-            }
-            return String.valueOf(result);
-        }
+    private String getExceptionMappingKey(Object controller, Class<? extends Exception> exceptionClass) {
+        return String.format("%s:%s", controller, exceptionClass);
     }
 }

@@ -2,6 +2,7 @@ package com.conference.util;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -14,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Reflection {
 
@@ -24,6 +24,15 @@ public class Reflection {
                 .filter(m -> m.getDeclaringClass().equals(type))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public static <T> Object getFieldValue(T data, Field field) {
+        field.setAccessible(true);
+        try {
+            return field.get(data);
+        } catch (IllegalAccessException e) {
+            return null;
+        }
     }
 
     public static List<Class> getClasses(String packageName, Class<? extends Annotation>... annotations) {
@@ -40,7 +49,6 @@ public class Reflection {
                         return getClass(filePath.substring(filePath.indexOf(packageName), filePath.lastIndexOf(".")));
                     })
                     .filter(Objects::nonNull)
-                    .flatMap(c -> Stream.concat(Stream.of(c), Arrays.stream(c.getClasses())))
                     .filter(c -> annotations.length == 0 || Arrays.stream(annotations).allMatch(c::isAnnotationPresent))
                     .collect(Collectors.toList());
         } catch (Exception e) {
@@ -51,7 +59,7 @@ public class Reflection {
     public static List<Class> getGenericTypes(Type type) {
         if (type instanceof ParameterizedType) {
             return Arrays.stream(((ParameterizedType) type).getActualTypeArguments())
-                    .map(Class.class::cast)
+                    .map(t -> (Class) (t instanceof ParameterizedType ? ((ParameterizedType) t).getRawType() : t))
                     .collect(Collectors.toList());
         } else {
             return Collections.emptyList();

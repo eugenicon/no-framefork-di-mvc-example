@@ -1,10 +1,22 @@
 package com.conference.data.entity;
 
+import com.conference.validation.Matches;
+import com.conference.validation.NotEmpty;
+
 public class Report {
     private Integer id;
+
+    @NotEmpty("You must specify the theme")
     private String theme;
+
+    @NotEmpty("Choose a place for the report")
     private String place;
+
+    @NotEmpty("Select the main reporter")
+    @Matches(regex = Matches.LETTERS_ONLY, message = "Reporter should have a valid name")
     private String reporter;
+
+    @Matches(regex = ".{10,}", message = "Description must be at least 10 symbols")
     private String description;
 
     public Report() {

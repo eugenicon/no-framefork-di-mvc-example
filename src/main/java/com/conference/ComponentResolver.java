@@ -6,6 +6,7 @@ import com.conference.util.Reflection;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Parameter;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,13 @@ public class ComponentResolver {
             Class parameterType = parameters[i].getType();
             if (parameterType.equals(List.class)) {
                 Class actualParameterType = Reflection.getGenericTypes(parameters[i].getParameterizedType()).get(0);
-                List<Class> classList = declaredComponentClasses.stream().filter(actualParameterType::isAssignableFrom).collect(Collectors.toList());
+                List<Class> classList = declaredComponentClasses.stream()
+                        .filter(actualParameterType::isAssignableFrom)
+                        .sorted(Comparator.comparingInt(c -> {
+                            Order annotation = (Order) c.getAnnotation(Order.class);
+                            return annotation == null ? 0 : annotation.value();
+                        }))
+                        .collect(Collectors.toList());
                 args[i] = classList.stream().map(c -> resolveComponentInstance(declaredComponentClasses, c)).collect(Collectors.toList());
             } else if (componentInstances.containsKey(parameterType) || declaredComponentClasses.contains(parameterType)) {
                 args[i] = resolveComponentInstance(declaredComponentClasses, parameterType);

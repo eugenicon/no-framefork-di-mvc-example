@@ -5,8 +5,13 @@ import com.conference.data.dao.ReportDao;
 import com.conference.data.entity.Report;
 import com.conference.servlet.View;
 import com.conference.servlet.annotation.Controller;
+import com.conference.servlet.annotation.ExceptionMapping;
 import com.conference.servlet.annotation.GetMapping;
 import com.conference.servlet.annotation.PostMapping;
+import com.conference.validation.Valid;
+import com.conference.validation.ValidationException;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Component
 @Controller
@@ -33,7 +38,7 @@ public class ReportController {
     }
 
     @PostMapping("/reports/save")
-    public String save(Report report) {
+    public String save(@Valid Report report) {
         reportDao.save(report);
         return "redirect:/reports";
     }
@@ -42,5 +47,13 @@ public class ReportController {
     public String delete(Integer id) {
         reportDao.removeById(id);
         return "redirect:/reports";
+    }
+
+    @ExceptionMapping(ValidationException.class)
+    public View onFailedValidation(HttpServletRequest request, ValidationException exception) {
+        String refererUrl = request.getHeader("Referer");
+        return View.of("redirect:" + refererUrl)
+                .with("item", exception.getValue())
+                .with("validationResult", exception.getValidationResult());
     }
 }
