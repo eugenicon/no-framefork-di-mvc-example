@@ -2,6 +2,7 @@ package com.conference.util;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.net.URL;
@@ -16,6 +17,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Reflection {
+
+    public static Method getMethod(Class<?> type, String methodName) {
+        return Arrays.stream(type.getMethods())
+                .filter(m -> m.getName().equals(methodName))
+                .filter(m -> m.getDeclaringClass().equals(type))
+                .findFirst()
+                .orElse(null);
+    }
 
     public static List<Class> getClasses(String packageName, Class<? extends Annotation>... annotations) {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();

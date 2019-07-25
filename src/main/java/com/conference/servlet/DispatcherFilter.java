@@ -16,8 +16,8 @@ public class DispatcherFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) {
         contextPath = filterConfig.getServletContext().getContextPath();
-        openResources = Stream.of("/static/.*", "/webjars/.*", "/WEB-INF/.*", DispatcherServlet.URL + "/.*")
-                .map(url -> contextPath + url).collect(Collectors.toList());
+        openResources = Stream.of("/static/.*", "/webjars/.*")
+                .map(contextPath::concat).collect(Collectors.toList());
     }
 
     @Override

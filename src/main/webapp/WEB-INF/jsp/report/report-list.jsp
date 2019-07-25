@@ -30,7 +30,7 @@
         </tbody>
     </table>
 
-    <tag:data-table table="reports" options="true">
+    <tag:data-table table="reports" menu="true">
         <a class="dropdown-item" href="${base}/reports/add">Add</a>
     </tag:data-table>
 </tag:page>

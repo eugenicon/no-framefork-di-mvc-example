@@ -1,6 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
-<%@attribute name="name" %>
+<%@attribute name="name" required="true" %>
 <%@attribute name="hideNavBar" %>
 
 <c:set var="base" value="${pageContext.request.contextPath}" scope="application"/>
@@ -8,6 +8,7 @@
 <html>
 <head>
     <title>${name}</title>
+    <link rel="icon" href="${base}/static/img/favicon.png" />
 
     <link rel="stylesheet" href="${base}/webjars/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="${base}/webjars/font-awesome/5.9.0/css/all.css">
@@ -19,8 +20,6 @@
 
 </head>
 <body>
-
-<tag:confirm-modal/>
 
 <c:if test="${!hideNavBar}">
     <nav class="navbar navbar-expand navbar-light bg-light">
@@ -37,6 +36,8 @@
 <div class="container">
     <jsp:doBody/>
 </div>
+
+<tag:confirm-modal/>
 
 </body>
 </html>

@@ -1,9 +1,7 @@
 <%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%--
-<jsp:useBean id="item" class="com.conference.data.entity.Report" scope="request"/>
---%>
+<c:if test=""><jsp:useBean id="item" class="com.conference.data.entity.Report" /></c:if>
 
 <tag:page name="Reports">
     Edit

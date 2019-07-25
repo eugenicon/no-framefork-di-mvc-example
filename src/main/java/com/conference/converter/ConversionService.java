@@ -1,6 +1,7 @@
 package com.conference.converter;
 
 import com.conference.Component;
+import com.conference.util.Reflection;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -13,18 +14,10 @@ public class ConversionService {
     private List<ConversionRegistry> conversionRegistries = new ArrayList<>();
 
     public void register(Converter converter) {
-        Method convertMethod = getConvertMethod(converter);
+        Method convertMethod = Reflection.getMethod(converter.getClass(), "convert");
         Class<?> incomingType = convertMethod.getParameterTypes()[0];
         Class<?> returnType = convertMethod.getReturnType();
         conversionRegistries.add(new ConversionRegistry(incomingType, returnType, converter));
-    }
-
-    private Method getConvertMethod(Converter converter) {
-        return Arrays.stream(converter.getClass().getMethods())
-                .filter(m -> m.getName().equals("convert"))
-                .filter(m -> !m.getDeclaringClass().equals(Converter.class))
-                .findFirst()
-                .orElse(null);
     }
 
     @SuppressWarnings("unchecked")
