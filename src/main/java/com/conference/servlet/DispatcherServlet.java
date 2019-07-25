@@ -1,6 +1,6 @@
 package com.conference.servlet;
 
-import com.conference.config.ComponentConfig;
+import com.conference.ComponentResolver;
 import com.conference.servlet.annotation.Controller;
 
 import javax.servlet.ServletException;
@@ -22,9 +22,8 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init() {
-        ComponentConfig componentConfig = new ComponentConfig();
-        List<?> controllers = componentConfig.getAnnotatedComponents(Controller.class);
-        requestResolver = componentConfig.getComponent(RequestResolver.class);
+        List<?> controllers = ComponentResolver.getAnnotatedComponents(Controller.class);
+        requestResolver = ComponentResolver.getComponent(RequestResolver.class);
         requestResolver.register(controllers, getServletContext().getContextPath() + URL);
     }
 

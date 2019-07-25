@@ -1,4 +1,4 @@
-td:last-of-type {
+td:last-of-type:not(:first-child) {
     display: flex;
     justify-content: space-between;
 }

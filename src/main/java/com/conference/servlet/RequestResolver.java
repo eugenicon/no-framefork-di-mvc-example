@@ -1,5 +1,6 @@
 package com.conference.servlet;
 
+import com.conference.Component;
 import com.conference.converter.ConversionService;
 import com.conference.servlet.annotation.GetMapping;
 import com.conference.servlet.annotation.PostMapping;
@@ -14,6 +15,7 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Component
 public class RequestResolver {
     private static final String REQUEST_PATH_REGEX = "\\{([^}]+)}";
     private final Map<String, Map<String, ControllerResolver>> mappings = new HashMap<>();

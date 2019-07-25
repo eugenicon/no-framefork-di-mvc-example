@@ -1,9 +1,11 @@
 package com.conference.converter;
 
+import com.conference.Component;
 import com.conference.data.entity.Report;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Component
 public class RequestToReportConverter implements Converter<HttpServletRequest, Report> {
     private final ConversionService conversionService;
 

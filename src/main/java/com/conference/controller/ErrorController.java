@@ -1,8 +1,10 @@
 package com.conference.controller;
 
+import com.conference.Component;
 import com.conference.servlet.annotation.Controller;
 import com.conference.servlet.annotation.GetMapping;
 
+@Component
 @Controller
 public class ErrorController {
 

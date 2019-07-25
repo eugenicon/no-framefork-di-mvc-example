@@ -1,5 +1,6 @@
 package com.conference.controller;
 
+import com.conference.Component;
 import com.conference.data.dao.ReportDao;
 import com.conference.data.entity.Report;
 import com.conference.servlet.View;
@@ -7,6 +8,7 @@ import com.conference.servlet.annotation.Controller;
 import com.conference.servlet.annotation.GetMapping;
 import com.conference.servlet.annotation.PostMapping;
 
+@Component
 @Controller
 public class ReportController {
     private final ReportDao reportDao;

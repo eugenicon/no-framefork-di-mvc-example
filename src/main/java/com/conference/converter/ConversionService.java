@@ -1,11 +1,14 @@
 package com.conference.converter;
 
+import com.conference.Component;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+@Component
 public class ConversionService {
     private List<ConversionRegistry> conversionRegistries = new ArrayList<>();
 

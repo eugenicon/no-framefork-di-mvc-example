@@ -1,10 +1,12 @@
 package com.conference.data.dao;
 
+import com.conference.Component;
 import com.conference.data.entity.Report;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class ReportDao {
     private List<Report> data = new ArrayList<>();
 
