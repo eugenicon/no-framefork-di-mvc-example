@@ -5,12 +5,15 @@ import com.conference.Component;
 import com.conference.util.function.SafeBiConsumer;
 import com.conference.util.function.SafeConsumer;
 import com.conference.util.function.SafeFunction;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.*;
 
 @Component
 public class DataSource {
+    private static final Logger LOGGER = LogManager.getLogger(DataSource.class);
     private final String userName;
     private final String password;
     private final String url;
@@ -39,6 +42,7 @@ public class DataSource {
                     }
                 }
             }
+            LOGGER.debug(ps);
             if (queryData.query.toUpperCase().startsWith("SELECT")) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
@@ -110,6 +114,7 @@ public class DataSource {
             boolean useTransactions = queries.size() > 1;
             try (Connection connection = getConnection()) {
                 if (useTransactions) {
+                    LOGGER.debug("begin transaction");
                     connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
                     connection.setAutoCommit(false);
                 }
@@ -117,9 +122,11 @@ public class DataSource {
                     list.addAll(executeQuery(connection, queryData));
                 }
                 if (useTransactions) {
+                    LOGGER.debug("commit transaction");
                     connection.commit();
                 }
             } catch (SQLException e) {
+                LOGGER.error(e);
                 throw new RuntimeException(e);
             }
             return list;

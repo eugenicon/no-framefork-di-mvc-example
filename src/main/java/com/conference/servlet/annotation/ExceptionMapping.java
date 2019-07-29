@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExceptionMapping {
-    String KEY = "ANY_EXCEPTION";
+    String KEY = "EXCEPTION";
     Class<? extends Exception> value();
 }

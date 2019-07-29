@@ -6,6 +6,8 @@ import com.conference.servlet.annotation.GetMapping;
 import com.conference.servlet.annotation.PostMapping;
 import com.conference.servlet.resolver.RequestResolution;
 import com.conference.servlet.resolver.Resolver;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
@@ -20,6 +22,7 @@ import java.util.regex.Pattern;
 
 @Component
 public class RequestResolver {
+    private static final Logger LOGGER = LogManager.getLogger(RequestResolver.class);
     private static final String REQUEST_PATH_REGEX = "\\{([^}]+)}";
     private final Map<String, Map<String, ControllerRegistry>> mappings = new HashMap<>();
     private final List<Resolver> resolvers;
@@ -47,6 +50,7 @@ public class RequestResolver {
         if (annotation != null) {
             String urlMapping = urlSource.apply(annotation);
             mappings.get(httpMethod).put(urlMapping, new ControllerRegistry(controller, controllerMethod));
+            LOGGER.info("Registered {} mapping for {}: {}.{}", httpMethod, urlMapping, controller.getClass().getSimpleName(), controllerMethod.getName());
         }
     }
 
@@ -59,8 +63,10 @@ public class RequestResolver {
             try {
                 resolveRequest(requestResolution, resolverRegistry, resolvers);
             } catch (Exception e) {
-                req.setAttribute("exception", e);
-                requestResolution.setException(e);
+                Exception cause = e.getCause() == null ? e : (Exception) e.getCause();
+                LOGGER.warn(cause);
+                req.setAttribute("exception", cause);
+                requestResolution.setException(cause);
                 String exceptionKey = getExceptionMappingKey(resolverRegistry.getController(), e.getClass());
                 ControllerRegistry resolver = mappings.get(ExceptionMapping.KEY).get(exceptionKey);
                 resolveRequest(requestResolution, resolver, resolvers);
@@ -104,6 +110,6 @@ public class RequestResolver {
     }
 
     private String getExceptionMappingKey(Object controller, Class<? extends Exception> exceptionClass) {
-        return String.format("%s:%s", controller, exceptionClass);
+        return String.format("%s:%s", controller.getClass().getSimpleName(), exceptionClass.getSimpleName());
     }
 }

@@ -7,12 +7,15 @@ import com.conference.validation.Valid;
 import com.conference.validation.ValidationException;
 import com.conference.validation.ValidationResult;
 import com.conference.validation.ValidationService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Parameter;
 
 @Order(1)
 @Component
 public class ValidationResolver implements Resolver {
+    private static final Logger LOGGER = LogManager.getLogger(ValidationResolver.class);
     private final ValidationService validationService;
 
     public ValidationResolver(ValidationService validationService) {
@@ -28,6 +31,7 @@ public class ValidationResolver implements Resolver {
                 Object value = arguments[i];
                 ValidationResult result = validationService.validate(value);
                 if (!result.isSuccess()) {
+                    LOGGER.warn("Invalid data: {}", result);
                     throw new ValidationException(result, value);
                 }
             }

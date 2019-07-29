@@ -2,6 +2,8 @@ package com.conference.servlet;
 
 import com.conference.ComponentResolver;
 import com.conference.servlet.annotation.Controller;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +19,7 @@ import java.util.Map;
 @WebServlet(DispatcherServlet.URL + "/*")
 public class DispatcherServlet extends HttpServlet {
     public static final String URL = "/mvc";
+    private static final Logger LOGGER = LogManager.getLogger(DispatcherServlet.class);
     private static final String REDIRECT_PARAMS = "REDIRECT_PARAMS";
     private RequestResolver requestResolver;
 
@@ -39,13 +42,16 @@ public class DispatcherServlet extends HttpServlet {
 
     private void resolve(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         try {
+            LOGGER.info("{} {}, parameters: {}", req.getMethod(), req.getRequestURI(), req.getParameterMap());
             if (req.getSession().getAttribute(REDIRECT_PARAMS) != null) {
                 readRedirectionAttributes(req);
             }
             String targetUrl = requestResolver.resolve(req);
             processUrl(targetUrl.isEmpty() ? "redirect:/404" : targetUrl, req, resp);
         } catch (Exception e) {
-            req.setAttribute("exception", e.getCause() == null ? e : e.getCause());
+            Throwable cause = e.getCause() == null ? e : e.getCause();
+            LOGGER.error(cause.getMessage(), cause);
+            req.setAttribute("exception", cause);
             processUrl("redirect:/500", req, resp);
         }
     }
@@ -56,8 +62,10 @@ public class DispatcherServlet extends HttpServlet {
             writeRedirectionAttributes(req);
             String redirectUrl = targetUrl.substring(9);
             String location = redirectUrl.startsWith("/") ? req.getContextPath() : "";
+            LOGGER.info("Redirecting to {}{}", location, redirectUrl);
             resp.sendRedirect(location + redirectUrl);
         } else {
+            LOGGER.info("Forwarding to {}", targetUrl);
             req.getRequestDispatcher(targetUrl).forward(req, resp);
         }
     }

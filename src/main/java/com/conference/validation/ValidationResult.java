@@ -21,4 +21,9 @@ public class ValidationResult {
     public boolean isSuccess() {
         return validationMap.isEmpty();
     }
+
+    @Override
+    public String toString() {
+        return "ValidationResult" + validationMap;
+    }
 }
