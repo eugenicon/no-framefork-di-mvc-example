@@ -25,10 +25,11 @@
     <nav class="navbar navbar-expand navbar-light bg-light">
         <a class="navbar-brand" href="#">Navbar</a>
         <div class="navbar-nav">
-            <a class="nav-item nav-link" href="${base}/">Home</a>
-            <a class="nav-item nav-link" href="${base}/reports">Reports</a>
-            <a class="nav-item nav-link" href="${base}/test-400">404</a>
-            <a class="nav-item nav-link" href="${base}/test-500">500</a>
+            <tag:nav-item url="${base}/" label="Home" fullMatch="true"/>
+            <tag:nav-item url="${base}/locations" label="Locations"/>
+            <tag:nav-item url="${base}/reports" label="Reports"/>
+            <tag:nav-item url="${base}/test-400" label="404"/>
+            <tag:nav-item url="${base}/test-500" label="500"/>
         </div>
     </nav>
 </c:if>

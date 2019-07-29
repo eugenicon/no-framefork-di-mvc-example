@@ -1,9 +1,12 @@
 <%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<c:if test=""><jsp:useBean id="item" class="com.conference.data.entity.Report" /></c:if>
+<c:if test="">
+    <jsp:useBean id="item" type="com.conference.data.entity.Report" />
+    <jsp:useBean id="locations" type="java.util.List<com.conference.data.entity.Location>" />
+</c:if>
 
-<tag:page name="Reports">
+<tag:page name="Edit Report">
     Edit
 
     <form method="post" action="${base}/reports/save" class="form" role="form">
@@ -15,7 +18,19 @@
         </div>
         <div class="form-group">
             <label for="place">Place:</label>
-            <input type="text" class="form-control" id="place" name="place" placeholder="Choose place" value="${item.place}">
+            <select class="custom-select" id="place" name="place" >
+                <c:if test="${item.place == null}">
+                    <option disabled hidden selected>Select value...</option>
+                </c:if>
+                <c:if test="${item.place != null}">
+                    <option selected value="${item.place.id}" >${item.place.name}</option>
+                </c:if>
+                <c:forEach var="element" items="${locations}">
+                    <c:if test="${element.id != item.place.id}">
+                        <option value="${element.id}" >${element.name}</option>
+                    </c:if>
+                </c:forEach>
+            </select>
             <tag:validation field="place"/>
         </div>
         <div class="form-group">

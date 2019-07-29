@@ -2,8 +2,7 @@ package com.conference.controller;
 
 import com.conference.Component;
 import com.conference.dao.LocationDao;
-import com.conference.dao.ReportDao;
-import com.conference.data.entity.Report;
+import com.conference.data.entity.Location;
 import com.conference.servlet.View;
 import com.conference.servlet.annotation.Controller;
 import com.conference.servlet.annotation.ExceptionMapping;
@@ -16,40 +15,38 @@ import javax.servlet.http.HttpServletRequest;
 
 @Component
 @Controller
-public class ReportController {
-    private final ReportDao reportDao;
+public class LocationController {
     private final LocationDao locationDao;
 
-    public ReportController(ReportDao reportDao, LocationDao locationDao) {
-        this.reportDao = reportDao;
+    public LocationController(LocationDao locationDao) {
         this.locationDao = locationDao;
     }
 
-    @GetMapping("/reports")
+    @GetMapping("/locations")
     public View showListPage() {
-        return View.of("report/report-list.jsp").with("list", reportDao.getAll());
+        return View.of("place/place-list.jsp").with("list", locationDao.getAll());
     }
 
-    @GetMapping("/reports/add")
-    public View showAddPage() {
-        return View.of("report/report-edit.jsp").with("locations", locationDao.getAll());
+    @GetMapping("/locations/add")
+    public String showAddPage() {
+        return "place/place-edit.jsp";
     }
 
-    @GetMapping("/reports/{id}")
+    @GetMapping("/locations/{id}")
     public View showEditPage(Integer id) {
-        return showAddPage().with("item", reportDao.findById(id));
+        return View.of("place/place-edit.jsp").with("item", locationDao.findById(id));
     }
 
-    @PostMapping("/reports/save")
-    public String save(@Valid Report entity) {
-        reportDao.save(entity);
-        return "redirect:/reports";
+    @PostMapping("/locations/save")
+    public String save(@Valid Location entity) {
+        locationDao.save(entity);
+        return "redirect:/locations";
     }
 
-    @PostMapping("/reports/delete/{id}")
+    @PostMapping("/locations/delete/{id}")
     public String delete(Integer id) {
-        reportDao.removeById(id);
-        return "redirect:/reports";
+        locationDao.removeById(id);
+        return "redirect:/locations";
     }
 
     @ExceptionMapping(ValidationException.class)

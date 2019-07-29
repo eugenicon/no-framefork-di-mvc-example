@@ -12,9 +12,11 @@ import java.util.List;
 @Component
 public class ReportDao implements Dao<Report> {
     private final DataSource dataSource;
+    private final LocationDao locationDao;
 
-    public ReportDao(DataSource dataSource) {
+    public ReportDao(DataSource dataSource, LocationDao locationDao) {
         this.dataSource = dataSource;
+        this.locationDao = locationDao;
     }
 
     @Override
@@ -60,11 +62,11 @@ public class ReportDao implements Dao<Report> {
 
     private void prepare(Report entity, PreparedStatement ps, boolean isUpdate) throws SQLException {
         ps.setString(1, entity.getTheme());
-        ps.setString(2, entity.getPlace());
+        ps.setInt(2, entity.getPlace().getId());
         ps.setString(3, entity.getReporter());
         ps.setString(4, entity.getDescription());
         if (isUpdate) {
-            ps.setInt(7, entity.getId());
+            ps.setInt(5, entity.getId());
         }
     }
 
@@ -72,7 +74,7 @@ public class ReportDao implements Dao<Report> {
         Report entity = new Report();
         entity.setId(rs.getInt("id"));
         entity.setTheme(rs.getString("theme"));
-        entity.setPlace(rs.getString("place"));
+        entity.setPlace(locationDao.findById(rs.getInt("place")));
         entity.setReporter(rs.getString("reporter"));
         entity.setDescription(rs.getString("description"));
         return entity;

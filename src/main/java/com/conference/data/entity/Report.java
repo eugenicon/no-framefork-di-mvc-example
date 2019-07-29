@@ -10,7 +10,7 @@ public class Report {
     private String theme;
 
     @NotEmpty("Choose a place for the report")
-    private String place;
+    private Location place;
 
     @NotEmpty("Select the main reporter")
     @Matches(regex = Matches.LETTERS_ONLY, message = "Reporter should have a valid name")
@@ -18,15 +18,6 @@ public class Report {
 
     @Matches(regex = ".{10,}", message = "Description must be at least 10 symbols")
     private String description;
-
-    public Report() {
-    }
-
-    public Report(String theme, String place, String reporter) {
-        this.theme = theme;
-        this.place = place;
-        this.reporter = reporter;
-    }
 
     public Integer getId() {
         return id;
@@ -44,11 +35,11 @@ public class Report {
         this.theme = theme;
     }
 
-    public String getPlace() {
+    public Location getPlace() {
         return place;
     }
 
-    public void setPlace(String place) {
+    public void setPlace(Location place) {
         this.place = place;
     }
 

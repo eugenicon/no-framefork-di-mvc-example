@@ -20,7 +20,7 @@
             <tr>
                 <td>${item.id}</td>
                 <td>${item.theme}</td>
-                <td>${item.place}</td>
+                <td>${item.place.name}</td>
                 <td>${item.reporter}
                     <tag:table-actions edit="${base}/reports/${item.id}"
                                        delete="${base}/reports/delete/${item.id}"/>
