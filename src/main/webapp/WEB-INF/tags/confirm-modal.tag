@@ -19,9 +19,16 @@
 </div>
 
 <script>
-    $(document).on("click", ".data-callback", function () {
-        var callback = $(this).data('callback');
-        var trigger = $(this).data('trigger');
-        $(trigger).attr( 'onclick' , callback);
+    var actions = $('.confirm-action');
+    actions.each(function () {
+        var element = $(this);
+        var callback = element.attr( 'onclick');
+        element.attr('data-toggle', 'modal')
+            .attr('data-target', '#confirm-modal')
+            .attr( 'onclick' , '');
+
+        element.on('click', function () {
+            $('#confirmChanges').attr( 'onclick' , callback);
+        });
     });
 </script>

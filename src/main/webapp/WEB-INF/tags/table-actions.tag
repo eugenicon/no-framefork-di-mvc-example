@@ -4,7 +4,5 @@
 
 <div class="table-options">
     <i class="fas fa-pen" onclick="get('${edit}')"></i>
-    <tag:confirm-button onConfirm="post('${delete}')">
-        <i class="fas fa-times"></i>
-    </tag:confirm-button>
+    <i class="fas fa-times confirm-action" onclick="post('${delete}')"></i>
 </div>
