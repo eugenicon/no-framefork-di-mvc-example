@@ -7,16 +7,19 @@ import com.conference.data.entity.Report;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Component
 public class ReportDao implements Dao<Report> {
     private final DataSource dataSource;
     private final LocationDao locationDao;
+    private final UserDao userDao;
 
-    public ReportDao(DataSource dataSource, LocationDao locationDao) {
+    public ReportDao(DataSource dataSource, LocationDao locationDao, UserDao userDao) {
         this.dataSource = dataSource;
         this.locationDao = locationDao;
+        this.userDao = userDao;
     }
 
     @Override
@@ -49,13 +52,13 @@ public class ReportDao implements Dao<Report> {
     }
 
     private void add(Report entity) {
-        dataSource.query("insert into reports (theme,place,reporter,description) values(?,?,?,?)")
+        dataSource.query("insert into reports (theme,place,reporter,startTime,endTime,description) values(?,?,?,?,?,?)")
                 .prepare(ps -> prepare(entity, ps, false))
                 .execute(rs -> entity.setId(rs.getInt(1)));
     }
 
     private void update(Report entity) {
-        dataSource.query("update reports set theme = ?,place = ?,reporter = ?,description = ? where id = ?")
+        dataSource.query("update reports set theme = ?,place = ?,reporter = ?,startTime = ?,endTime = ?,description = ? where id = ?")
                 .prepare(ps -> prepare(entity, ps, true))
                 .execute();
     }
@@ -63,10 +66,12 @@ public class ReportDao implements Dao<Report> {
     private void prepare(Report entity, PreparedStatement ps, boolean isUpdate) throws SQLException {
         ps.setString(1, entity.getTheme());
         ps.setInt(2, entity.getPlace().getId());
-        ps.setString(3, entity.getReporter());
-        ps.setString(4, entity.getDescription());
+        ps.setInt(3, entity.getReporter().getId());
+        ps.setTimestamp(4, new Timestamp(entity.getStartTime().getTime()));
+        ps.setTimestamp(5, new Timestamp(entity.getEndTime().getTime()));
+        ps.setString(6, entity.getDescription());
         if (isUpdate) {
-            ps.setInt(5, entity.getId());
+            ps.setInt(7, entity.getId());
         }
     }
 
@@ -75,8 +80,10 @@ public class ReportDao implements Dao<Report> {
         entity.setId(rs.getInt("id"));
         entity.setTheme(rs.getString("theme"));
         entity.setPlace(locationDao.findById(rs.getInt("place")));
-        entity.setReporter(rs.getString("reporter"));
+        entity.setReporter(userDao.findById(rs.getInt("reporter")));
         entity.setDescription(rs.getString("description"));
+        entity.setStartTime(rs.getTimestamp("startTime"));
+        entity.setEndTime(rs.getTimestamp("endTime"));
         return entity;
     }
 }

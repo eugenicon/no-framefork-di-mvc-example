@@ -3,6 +3,8 @@ package com.conference.data.entity;
 import com.conference.validation.Matches;
 import com.conference.validation.NotEmpty;
 
+import java.util.Date;
+
 public class Report {
     private Integer id;
 
@@ -13,8 +15,13 @@ public class Report {
     private Location place;
 
     @NotEmpty("Select the main reporter")
-    @Matches(regex = Matches.LETTERS_ONLY, message = "Reporter should have a valid name")
-    private String reporter;
+    private User reporter;
+
+    @NotEmpty("Set start time")
+    private Date startTime;
+
+    @NotEmpty("Set end time")
+    private Date endTime;
 
     @Matches(regex = ".{10,}", message = "Description must be at least 10 symbols")
     private String description;
@@ -43,11 +50,11 @@ public class Report {
         this.place = place;
     }
 
-    public String getReporter() {
+    public User getReporter() {
         return reporter;
     }
 
-    public void setReporter(String reporter) {
+    public void setReporter(User reporter) {
         this.reporter = reporter;
     }
 
@@ -57,5 +64,21 @@ public class Report {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }

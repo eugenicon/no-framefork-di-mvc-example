@@ -14,6 +14,7 @@ public @interface Matches {
     String message();
 
     String LETTERS_ONLY = "[a-zA-Z\\s]+";
+    String EMAIL = "\\S+@\\S+\\.\\S+";
 
     @Component
     class AnnotationValidationProcessor implements Validator<Matches, String> {

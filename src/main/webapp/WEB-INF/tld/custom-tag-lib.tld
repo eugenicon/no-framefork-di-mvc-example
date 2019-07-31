@@ -14,4 +14,16 @@
         <function-signature>java.lang.String stacktrace(java.lang.Exception)</function-signature>
     </function>
 
+    <function>
+        <name>format</name>
+        <function-class>com.conference.servlet.taglib.Functions</function-class>
+        <function-signature>java.lang.String formatDate(java.util.Date)</function-signature>
+    </function>
+
+    <function>
+        <name>formatWith</name>
+        <function-class>com.conference.servlet.taglib.Functions</function-class>
+        <function-signature>java.lang.String formatDate(java.util.Date,java.lang.String)</function-signature>
+    </function>
+
 </taglib>

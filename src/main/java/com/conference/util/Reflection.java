@@ -10,10 +10,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Reflection {
@@ -22,7 +19,7 @@ public class Reflection {
         return Arrays.stream(type.getMethods())
                 .filter(m -> m.getName().equals(methodName))
                 .filter(m -> m.getDeclaringClass().equals(type))
-                .findFirst()
+                .max(Comparator.comparingInt(m -> m.getReturnType().equals(Object.class) ? 0 : 1))
                 .orElse(null);
     }
 

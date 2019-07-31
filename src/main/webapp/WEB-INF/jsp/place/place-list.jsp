@@ -4,7 +4,7 @@
 <jsp:useBean id="list" scope="request" type="java.util.List<com.conference.data.entity.Location>"/>
 
 <tag:page name="Locations">
-    Report list
+    Locations list
 
     <table class="table" id="locations">
         <thead>

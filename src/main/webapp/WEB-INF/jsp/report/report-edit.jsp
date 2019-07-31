@@ -1,9 +1,11 @@
 <%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fun" uri="/WEB-INF/tld/ctl" %>
 
 <c:if test="">
     <jsp:useBean id="item" type="com.conference.data.entity.Report" />
     <jsp:useBean id="locations" type="java.util.List<com.conference.data.entity.Location>" />
+    <jsp:useBean id="users" type="java.util.List<com.conference.data.entity.User>" />
 </c:if>
 
 <tag:page name="Edit Report">
@@ -17,25 +19,23 @@
             <tag:validation field="theme"/>
         </div>
         <div class="form-group">
-            <label for="place">Place:</label>
-            <select class="custom-select" id="place" name="place" >
-                <c:if test="${item.place == null}">
-                    <option disabled hidden selected>Select value...</option>
-                </c:if>
-                <c:if test="${item.place != null}">
-                    <option selected value="${item.place.id}" >${item.place.name}</option>
-                </c:if>
-                <c:forEach var="element" items="${locations}">
-                    <c:if test="${element.id != item.place.id}">
-                        <option value="${element.id}" >${element.name}</option>
-                    </c:if>
-                </c:forEach>
-            </select>
+            <label for="startTime">Start:</label>
+            <input id="startTime" name="startTime" class="form-control date-picker" time value="${fun:formatWith(item.startTime, 'HH:mm')}"/>
+            <tag:validation field="startTime"/>
+        </div>
+        <div class="form-group">
+            <label for="endTime">End:</label>
+            <input id="endTime" name="endTime" class="form-control date-picker" time value="${fun:formatWith(item.endTime, 'HH:mm')}" />
+            <tag:validation field="endTime"/>
+        </div>
+        <div class="form-group">
+            <label for="place">Place:</label><%--@declare id="place"--%>
+            <tag:select property="place" item="${item}" propertyKey="id" propertyView="name" list="${locations}"/>
             <tag:validation field="place"/>
         </div>
         <div class="form-group">
-            <label for="reporter">Reporter:</label>
-            <input type="text" class="form-control" id="reporter" name="reporter" placeholder="Choose reporter" value="${item.reporter}">
+            <label for="reporter">Reporter:</label><%--@declare id="reporter"--%>
+            <tag:select property="reporter" item="${item}" propertyKey="id" propertyView="name" list="${users}"/>
             <tag:validation field="reporter"/>
         </div>
         <div class="form-group">

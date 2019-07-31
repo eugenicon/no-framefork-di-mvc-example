@@ -5,7 +5,6 @@ import com.conference.util.Reflection;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,7 +29,7 @@ public class ConversionService {
         return conversionRegistries.stream()
                 .filter(reg -> reg.incomingType.isAssignableFrom(incomingType))
                 .filter(reg -> reg.returnType.isAssignableFrom(returnType))
-                .map(reg -> reg.converter.convert(incomingData))
+                .map(reg -> reg.converter.convert(incomingData, returnType))
                 .map(returnType::cast)
                 .filter(Objects::nonNull)
                 .findFirst().orElse(null);

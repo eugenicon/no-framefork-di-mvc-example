@@ -40,6 +40,7 @@ public class ComponentResolver {
                 Class actualParameterType = Reflection.getGenericTypes(parameters[i].getParameterizedType()).get(0);
                 List<Class> classList = declaredComponentClasses.stream()
                         .filter(actualParameterType::isAssignableFrom)
+                        .filter(type -> !type.equals(componentClass))
                         .sorted(Comparator.comparingInt(c -> {
                             Order annotation = (Order) c.getAnnotation(Order.class);
                             return annotation == null ? 0 : annotation.value();

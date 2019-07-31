@@ -18,6 +18,7 @@
     <script src="${base}/webjars/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="${base}/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+    <tag:date-time-picker/>
 </head>
 <body>
 
@@ -26,6 +27,7 @@
         <a class="navbar-brand" href="#">Navbar</a>
         <div class="navbar-nav">
             <tag:nav-item url="${base}/" label="Home" fullMatch="true"/>
+            <tag:nav-item url="${base}/users" label="Users"/>
             <tag:nav-item url="${base}/locations" label="Locations"/>
             <tag:nav-item url="${base}/reports" label="Reports"/>
             <tag:nav-item url="${base}/test-400" label="404"/>
