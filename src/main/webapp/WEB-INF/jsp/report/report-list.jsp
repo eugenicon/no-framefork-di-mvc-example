@@ -1,5 +1,6 @@
 <%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fun" uri="/WEB-INF/tld/ctl" %>
 
 <jsp:useBean id="list" scope="request" type="java.util.List<com.conference.data.entity.Report>"/>
 
@@ -13,6 +14,8 @@
             <th>Theme</th>
             <th>Place</th>
             <th>Reporter</th>
+            <th>Start</th>
+            <th>End</th>
         </tr>
         </thead>
         <tbody>
@@ -22,6 +25,8 @@
                 <td>${item.theme}</td>
                 <td>${item.place.name}</td>
                 <td>${item.reporter.name}
+                <td>${fun:formatWith(item.startTime, 'HH:mm')}
+                <td>${fun:formatWith(item.endTime, 'HH:mm')}
                     <tag:table-actions edit="${base}/reports/${item.id}"
                                        delete="${base}/reports/delete/${item.id}"/>
                 </td>
