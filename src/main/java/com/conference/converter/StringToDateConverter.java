@@ -18,6 +18,8 @@ public class StringToDateConverter implements Converter<String, Date> {
         try {
             if (string.length() == 5) {
                 return format.parse("01/01/0001 " + string);
+            } else if (string.length() == 10) {
+                return format.parse(string + " 00:00");
             } else {
                 return format.parse(string);
             }

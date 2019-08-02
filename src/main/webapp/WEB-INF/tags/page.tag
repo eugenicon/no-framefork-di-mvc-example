@@ -29,6 +29,7 @@
             <tag:nav-item url="${base}/" label="Home" fullMatch="true"/>
             <tag:nav-item url="${base}/users" label="Users"/>
             <tag:nav-item url="${base}/locations" label="Locations"/>
+            <tag:nav-item url="${base}/conferences" label="Conferences"/>
             <tag:nav-item url="${base}/reports" label="Reports"/>
             <tag:nav-item url="${base}/test-400" label="404"/>
             <tag:nav-item url="${base}/test-500" label="500"/>

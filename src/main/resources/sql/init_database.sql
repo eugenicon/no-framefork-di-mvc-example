@@ -20,7 +20,17 @@ create table if not exists reports
     theme       varchar(250) NOT NULL,
     place       int8 references locations,
     reporter    int8 references users,
-    startTime   timestamp NOT NULL,
-    endTime     timestamp NOT NULL,
+    startTime   timestamp    NOT NULL,
+    endTime     timestamp    NOT NULL,
     description varchar(500) NOT NULL
+);
+
+create table if not exists conferences
+(
+    id           SERIAL       NOT NULL PRIMARY KEY,
+    name         varchar(250) NOT NULL,
+    date         timestamp    NOT NULL,
+    moderator    int8 references users,
+    totalTickets int8,
+    description  varchar(500) NOT NULL
 );

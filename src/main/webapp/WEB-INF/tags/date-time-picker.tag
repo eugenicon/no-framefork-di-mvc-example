@@ -57,6 +57,10 @@
             pickerInput.attr('value', '');
             var datetimepicker = pickerInput.datetimepicker(options);
             pickerInput.attr('value', value);
+            pickerInput.attr('autocomplete', 'off');
+            if (!pickerInput.attr('placeholder')) {
+                pickerInput.attr('placeholder', options.format);
+            }
 
             if (time) {
                 datetimepicker.on("show", function () {
