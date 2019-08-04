@@ -27,8 +27,10 @@
                 <td>${item.reporter.name}
                 <td>${fun:formatWith(item.startTime, 'HH:mm')}
                 <td>${fun:formatWith(item.endTime, 'HH:mm')}
-                    <tag:table-actions edit="${base}/reports/${item.id}"
-                                       delete="${base}/reports/delete/${item.id}"/>
+                    <tag:if-role is="ADMIN">
+                        <tag:table-actions edit="${base}/reports/${item.id}"
+                                           delete="${base}/reports/delete/${item.id}"/>
+                    </tag:if-role>
                 </td>
             </tr>
         </c:forEach>
@@ -36,6 +38,8 @@
     </table>
 
     <tag:data-table table="reports" menu="true">
-        <a class="dropdown-item" href="${base}/reports/add">Add</a>
+        <tag:if-role is="ADMIN,MODERATOR">
+            <a class="dropdown-item" href="${base}/reports/add">Add</a>
+        </tag:if-role>
     </tag:data-table>
 </tag:page>

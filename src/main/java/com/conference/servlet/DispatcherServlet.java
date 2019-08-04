@@ -47,12 +47,12 @@ public class DispatcherServlet extends HttpServlet {
                 readRedirectionAttributes(req);
             }
             String targetUrl = requestResolver.resolve(req);
-            processUrl(targetUrl.isEmpty() ? "redirect:/404" : targetUrl, req, resp);
+            processUrl(targetUrl.isEmpty() ? "redirect:/error/404" : targetUrl, req, resp);
         } catch (Exception e) {
             Throwable cause = e.getCause() == null ? e : e.getCause();
             LOGGER.error(cause.getMessage(), cause);
             req.setAttribute("exception", cause);
-            processUrl("redirect:/500", req, resp);
+            processUrl("redirect:/error/500", req, resp);
         }
     }
 

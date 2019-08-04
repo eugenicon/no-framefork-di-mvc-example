@@ -59,6 +59,10 @@ public class ComponentResolver {
         }
     }
 
+    public static String getProperty(String key) {
+        return ComponentResolver.getComponent(Properties.class).getProperty(key, "");
+    }
+
     public static <T> T getComponent(Class<T> type) {
         return (T) getInstance().componentInstances.get(type);
     }

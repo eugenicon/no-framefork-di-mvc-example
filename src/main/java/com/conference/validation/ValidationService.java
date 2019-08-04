@@ -28,7 +28,11 @@ public class ValidationService {
         }
         for (Field field : data.getClass().getDeclaredFields()) {
             for (Annotation annotation : field.getDeclaredAnnotations()) {
-                validate(validationResult, annotation, () -> Reflection.getFieldValue(data, field), field.getName());
+                if (annotation instanceof ValidData) {
+                    validate(validationResult, annotation, () -> data, field.getName());
+                } else {
+                    validate(validationResult, annotation, () -> Reflection.getFieldValue(data, field), field.getName());
+                }
             }
         }
         return validationResult;

@@ -67,7 +67,7 @@ public class RequestResolver {
                 LOGGER.warn(cause);
                 req.setAttribute("exception", cause);
                 requestResolution.setException(cause);
-                String exceptionKey = getExceptionMappingKey(resolverRegistry.getController(), e.getClass());
+                String exceptionKey = getExceptionMappingKey(resolverRegistry.getController(), cause.getClass());
                 ControllerRegistry resolver = mappings.get(ExceptionMapping.KEY).get(exceptionKey);
                 resolveRequest(requestResolution, resolver, resolvers);
             }

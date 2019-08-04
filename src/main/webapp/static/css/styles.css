@@ -16,3 +16,7 @@ tr:hover .table-options {
     cursor: pointer;
     margin: 0 3px;
 }
+
+.vertical-padding {
+    padding-top: 15%;
+}

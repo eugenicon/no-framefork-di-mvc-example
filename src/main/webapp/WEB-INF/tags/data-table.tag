@@ -20,10 +20,15 @@
     $('#${table}').dataTable({
         "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
     });
-    var menu = $('#${table}_menu');
-    if (menu.length) {
-        var filter = $('#${table}_filter').children()[0];
-        filter.setAttribute('style', 'display: inline-flex;');
-        filter.appendChild(menu[0]);
+    var menus = $('#${table}_menu');
+    if (menus.length) {
+        var menu = menus[0];
+        if ($(menu).find('.dropdown-menu').children().length) {
+            var filter = $('#${table}_filter').children()[0];
+            filter.setAttribute('style', 'display: inline-flex;');
+            filter.appendChild(menu);
+        } else {
+            menu.remove();
+        }
     }
 </script>

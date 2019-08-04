@@ -6,6 +6,7 @@ import com.conference.converter.ConversionService;
 import com.conference.servlet.ControllerRegistry;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +24,7 @@ public class ArgumentResolver implements Resolver {
         this.conversionService = conversionService;
 
         argumentProviders.add((param, req) -> param.getType().equals(HttpServletRequest.class) ? req : null);
+        argumentProviders.add((param, req) -> param.getType().equals(HttpSession.class) ? req.getSession() : null);
         argumentProviders.add((param, req) -> req.getParameter(param.getName()));
         argumentProviders.add((param, req) -> req.getAttribute(param.getName()));
         argumentProviders.add((param, req) -> conversionService.convert(req, param.getType()));

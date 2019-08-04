@@ -1,5 +1,6 @@
-package com.conference.servlet;
+package com.conference.servlet.filter;
 
+import com.conference.servlet.DispatcherServlet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

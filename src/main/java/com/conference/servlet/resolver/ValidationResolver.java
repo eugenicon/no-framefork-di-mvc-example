@@ -29,6 +29,10 @@ public class ValidationResolver implements Resolver {
         for (int i = 0; i < parameters.length; i++) {
             if (parameters[i].isAnnotationPresent(Valid.class)) {
                 Object value = arguments[i];
+                if (value == null) {
+                    LOGGER.warn("Can not validate empty data of type {}", parameters[i].getType().getName());
+                    throw new IllegalStateException(String.format("Can not validate empty data of type %s. Perhaps there is no appropriate converter", parameters[i].getType().getSimpleName()));
+                }
                 ValidationResult result = validationService.validate(value);
                 if (!result.isSuccess()) {
                     LOGGER.warn("Invalid data: {}", result);

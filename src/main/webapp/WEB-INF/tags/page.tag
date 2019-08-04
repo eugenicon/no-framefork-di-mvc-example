@@ -27,12 +27,23 @@
         <a class="navbar-brand" href="#">Navbar</a>
         <div class="navbar-nav">
             <tag:nav-item url="${base}/" label="Home" fullMatch="true"/>
-            <tag:nav-item url="${base}/users" label="Users"/>
-            <tag:nav-item url="${base}/locations" label="Locations"/>
+            <tag:if-role is="ADMIN">
+                <tag:nav-item url="${base}/users" label="Users"/>
+                <tag:nav-item url="${base}/locations" label="Locations"/>
+            </tag:if-role>
             <tag:nav-item url="${base}/conferences" label="Conferences"/>
             <tag:nav-item url="${base}/reports" label="Reports"/>
-            <tag:nav-item url="${base}/test-400" label="404"/>
-            <tag:nav-item url="${base}/test-500" label="500"/>
+        </div>
+        <div class="navbar-nav ml-auto">
+            <div class="btn-group" >
+                <tag:if-role is="UNKNOWN">
+                    <a class="btn btn-outline-secondary" href="${base}/register">Sign up</a>
+                    <a class="btn btn-outline-primary" href="${base}/login">Sign in</a>
+                </tag:if-role>
+                <tag:if-role isNot="UNKNOWN">
+                    <a class="btn btn-outline-primary" href="${base}/logout">Sign out</a>
+                </tag:if-role>
+            </div>
         </div>
     </nav>
 </c:if>

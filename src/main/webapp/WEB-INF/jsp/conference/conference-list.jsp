@@ -25,8 +25,10 @@
                 <td>${fun:formatWith(item.date, 'MM/dd/yyyy')}</td>
                 <td>${item.moderator.name}
                 <td>${item.totalTickets}
-                    <tag:table-actions edit="${base}/conferences/${item.id}"
-                                       delete="${base}/conferences/delete/${item.id}"/>
+                    <tag:if-role is="ADMIN">
+                        <tag:table-actions edit="${base}/conferences/${item.id}"
+                                           delete="${base}/conferences/delete/${item.id}"/>
+                    </tag:if-role>
                 </td>
             </tr>
         </c:forEach>
@@ -34,6 +36,8 @@
     </table>
 
     <tag:data-table table="conferences" menu="true">
-        <a class="dropdown-item" href="${base}/conferences/add">Add</a>
+        <tag:if-role is="ADMIN,MODERATOR">
+            <a class="dropdown-item" href="${base}/conferences/add">Add</a>
+        </tag:if-role>
     </tag:data-table>
 </tag:page>

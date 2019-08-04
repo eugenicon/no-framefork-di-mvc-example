@@ -8,12 +8,17 @@ import com.conference.servlet.annotation.GetMapping;
 @Controller
 public class ErrorController {
 
-    @GetMapping("/404")
+    @GetMapping("/error/403")
+    public String show403() {
+        return "error/403.jsp";
+    }
+
+    @GetMapping("/error/404")
     public String show404() {
         return "error/404.jsp";
     }
 
-    @GetMapping("/500")
+    @GetMapping("/error/500")
     public String show500() {
         return "error/500.jsp";
     }

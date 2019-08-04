@@ -48,6 +48,12 @@ public class UserDao implements Dao<User> {
                 .execute();
     }
 
+    public Optional<User> findByName(String userName) {
+        return dataSource.query("select * from users where name = ?")
+                .prepare(ps -> ps.setString(1, userName))
+                .first(this::convert);
+    }
+
     private void add(User entity) {
         dataSource.query("insert into users (name,role,email,password) values(?,?,?,?)")
                 .prepare(ps -> prepare(entity, ps, false))
