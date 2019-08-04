@@ -6,7 +6,7 @@
 <tag:page name="Users">
     User list
 
-    <table class="table" id="users">
+    <table class="table data-table" id="users">
         <thead>
         <tr>
             <th>#</th>
@@ -30,7 +30,5 @@
         </tbody>
     </table>
 
-    <tag:data-table table="users" menu="true">
-        <a class="dropdown-item" href="${base}/users/add">Add</a>
-    </tag:data-table>
+    <a class="data-table-menu dropdown-item" href="${base}/users/add">Add</a>
 </tag:page>

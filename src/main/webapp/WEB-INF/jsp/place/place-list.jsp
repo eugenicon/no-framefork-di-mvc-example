@@ -6,7 +6,7 @@
 <tag:page name="Locations">
     Locations list
 
-    <table class="table" id="locations">
+    <table class="table data-table" id="locations">
         <thead>
         <tr>
             <th>#</th>
@@ -28,7 +28,5 @@
         </tbody>
     </table>
 
-    <tag:data-table table="locations" menu="true">
-        <a class="dropdown-item" href="${base}/locations/add">Add</a>
-    </tag:data-table>
+    <a class="data-table-menu dropdown-item" href="${base}/locations/add">Add</a>
 </tag:page>

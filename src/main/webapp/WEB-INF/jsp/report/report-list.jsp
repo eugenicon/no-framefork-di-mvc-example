@@ -7,7 +7,7 @@
 <tag:page name="Reports">
     Report list
 
-    <table class="table" id="reports">
+    <table class="table data-table" id="reports">
         <thead>
         <tr>
             <th>#</th>
@@ -37,9 +37,7 @@
         </tbody>
     </table>
 
-    <tag:data-table table="reports" menu="true">
-        <tag:if-role is="ADMIN,MODERATOR">
-            <a class="dropdown-item" href="${base}/reports/add">Add</a>
-        </tag:if-role>
-    </tag:data-table>
+    <tag:if-role is="ADMIN,MODERATOR">
+        <a class="data-table-menu dropdown-item" href="${base}/reports/add">Add</a>
+    </tag:if-role>
 </tag:page>

@@ -19,6 +19,7 @@
     <script src="${base}/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <tag:date-time-picker/>
+    <tag:data-table/>
 </head>
 <body>
 

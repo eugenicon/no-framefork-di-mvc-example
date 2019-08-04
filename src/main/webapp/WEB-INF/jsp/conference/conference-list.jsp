@@ -7,7 +7,7 @@
 <tag:page name="Conferences">
     Conferences list
 
-    <table class="table" id="conferences">
+    <table class="table data-table" id="conferences">
         <thead>
         <tr>
             <th>#</th>
@@ -33,11 +33,9 @@
             </tr>
         </c:forEach>
         </tbody>
-    </table>
 
-    <tag:data-table table="conferences" menu="true">
         <tag:if-role is="ADMIN,MODERATOR">
-            <a class="dropdown-item" href="${base}/conferences/add">Add</a>
+            <a class="data-table-menu dropdown-item" href="${base}/conferences/add">Add</a>
         </tag:if-role>
-    </tag:data-table>
+    </table>
 </tag:page>
