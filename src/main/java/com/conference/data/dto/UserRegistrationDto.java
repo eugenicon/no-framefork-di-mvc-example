@@ -1,20 +1,21 @@
 package com.conference.data.dto;
 
 
-import com.conference.validation.Matches;
-import com.conference.validation.UserRegistrationValidator;
-import com.conference.validation.ValidData;
+import com.conference.validation.annotation.Matches;
+import com.conference.validation.annotation.ValidData;
+import com.conference.validation.validator.UniqueEmailValidator;
+import com.conference.validation.validator.PasswordConfirmationValidator;
 
 
 public class UserRegistrationDto {
-    @Matches(regex = ".{4,}", message = "Username should be at least 4 symbols")
+    @Matches(regex = Matches.EMAIL, message = "Username should be valid email")
+    @ValidData(validator = UniqueEmailValidator.class, message = "Email is already in use")
     private String userName;
 
     @Matches(regex = ".{5,}", message = "Password should be at least 5 symbols")
     private String password;
 
-    @ValidData(validator = UserRegistrationValidator.class,
-            message = "Confirmation should match the password")
+    @ValidData(validator = PasswordConfirmationValidator.class, message = "Confirmation should match the password")
     private String passwordConfirmation;
 
     public String getUserName() {

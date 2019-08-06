@@ -11,7 +11,7 @@ import com.conference.servlet.annotation.Controller;
 import com.conference.servlet.annotation.ExceptionMapping;
 import com.conference.servlet.annotation.GetMapping;
 import com.conference.servlet.annotation.PostMapping;
-import com.conference.validation.Valid;
+import com.conference.validation.annotation.Valid;
 import com.conference.validation.ValidationException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +34,8 @@ public class RegistrationController {
     public String register(@Valid UserRegistrationDto userLogin) {
         boolean isFirstUser = userService.getAllUsers().isEmpty();
         User user = new User();
-        user.setName(userLogin.getUserName());
+        user.setEmail(userLogin.getUserName());
+        user.setName(userLogin.getUserName().split("@")[0]);
         user.setPassword(userLogin.getPassword());
         user.setRole(isFirstUser ? Role.ADMIN : Role.USER);
         userService.save(user);

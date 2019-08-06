@@ -1,7 +1,7 @@
 <%@taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 
 <tag:page name="Not Found" hideNavBar="true">
-    <div class="page-wrap d-flex flex-row align-items-center vertical-padding">
+    <div class="page-wrap d-flex flex-row align-items-center vertical-center">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-12 text-center">

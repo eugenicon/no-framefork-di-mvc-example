@@ -1,7 +1,7 @@
 package com.conference.data.entity;
 
-import com.conference.validation.NotEmpty;
-import com.conference.validation.Number;
+import com.conference.validation.annotation.NotEmpty;
+import com.conference.validation.annotation.Number;
 
 public class Location {
     private Integer id;

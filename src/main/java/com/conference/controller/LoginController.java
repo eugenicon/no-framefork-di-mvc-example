@@ -10,7 +10,7 @@ import com.conference.servlet.annotation.Controller;
 import com.conference.servlet.annotation.ExceptionMapping;
 import com.conference.servlet.annotation.GetMapping;
 import com.conference.servlet.annotation.PostMapping;
-import com.conference.validation.Valid;
+import com.conference.validation.annotation.Valid;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

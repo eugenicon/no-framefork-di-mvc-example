@@ -3,7 +3,7 @@ package com.conference.servlet.resolver;
 import com.conference.Component;
 import com.conference.Order;
 import com.conference.servlet.ControllerRegistry;
-import com.conference.validation.Valid;
+import com.conference.validation.annotation.Valid;
 import com.conference.validation.ValidationException;
 import com.conference.validation.ValidationResult;
 import com.conference.validation.ValidationService;

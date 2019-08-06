@@ -2,6 +2,8 @@ package com.conference.validation;
 
 import com.conference.Component;
 import com.conference.util.Reflection;
+import com.conference.validation.annotation.ValidData;
+import com.conference.validation.annotation.ValidationAnnotationProcessor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -12,10 +14,10 @@ import java.util.function.Supplier;
 
 @Component
 public class ValidationService {
-    private final Map<Class<? extends Annotation>, Validator<Annotation, Object>> validators = new HashMap<>();
+    private final Map<Class<? extends Annotation>, ValidationAnnotationProcessor<Annotation, Object>> validators = new HashMap<>();
 
-    public ValidationService(List<Validator<Annotation, Object>> validators) {
-        for (Validator<Annotation, Object> validator : validators) {
+    public ValidationService(List<ValidationAnnotationProcessor<Annotation, Object>> validators) {
+        for (ValidationAnnotationProcessor<Annotation, Object> validator : validators) {
             this.validators.put(validator.getSupportedType(), validator);
         }
     }
@@ -40,7 +42,7 @@ public class ValidationService {
 
     private <T> void validate(ValidationResult validationResult, Annotation annotation, Supplier<T> value, String fieldName) {
         if (validators.containsKey(annotation.annotationType())) {
-            Validator<Annotation, Object> validator = validators.get(annotation.annotationType());
+            ValidationAnnotationProcessor<Annotation, Object> validator = validators.get(annotation.annotationType());
             if (!validationResult.hasError(fieldName) && !validator.isValid(value.get(), annotation)) {
                 String errorMessage = validator.getErrorMessage(annotation);
                 validationResult.add(fieldName, errorMessage);

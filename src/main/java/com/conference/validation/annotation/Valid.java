@@ -1,4 +1,4 @@
-package com.conference.validation;
+package com.conference.validation.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

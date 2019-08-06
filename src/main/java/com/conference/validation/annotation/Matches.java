@@ -1,4 +1,4 @@
-package com.conference.validation;
+package com.conference.validation.annotation;
 
 import com.conference.Component;
 
@@ -17,7 +17,7 @@ public @interface Matches {
     String EMAIL = "\\S+@\\S+\\.\\S+";
 
     @Component
-    class AnnotationValidationProcessor implements Validator<Matches, String> {
+    class MatchesProcessor implements ValidationAnnotationProcessor<Matches, String> {
 
         @Override
         public boolean isValid(String data, Matches annotation) {

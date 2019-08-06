@@ -1,11 +1,10 @@
 package com.conference.data.entity;
 
-import com.conference.validation.Matches;
-import com.conference.validation.NotEmpty;
-import com.conference.validation.UserEmailValidator;
-import com.conference.validation.ValidData;
+import com.conference.validation.annotation.Matches;
+import com.conference.validation.annotation.NotEmpty;
+import com.conference.validation.annotation.ValidData;
+import com.conference.validation.validator.UniqueEmailValidator;
 
-@ValidData(field = "email", validator = UserEmailValidator.class, message = "Email is already in use")
 public class User {
     private Integer id;
 
@@ -18,6 +17,7 @@ public class User {
 
     @NotEmpty("You must specify user email")
     @Matches(regex = Matches.EMAIL, message = "User should have a valid email")
+    @ValidData(validator = UniqueEmailValidator.class, message = "Email is already in use")
     private String email;
 
     @NotEmpty("You must set user password")

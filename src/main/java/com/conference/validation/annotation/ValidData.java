@@ -1,8 +1,12 @@
-package com.conference.validation;
+package com.conference.validation.annotation;
 
 import com.conference.Component;
+import com.conference.validation.validator.Validator;
 
-import java.lang.annotation.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -16,10 +20,10 @@ public @interface ValidData {
     String message();
 
     @Component
-    class AnnotationValidationProcessor implements Validator<ValidData, Object> {
-        private final Map<Object, Validator<Annotation, Object>> validators;
+    class ValidDataProcessor implements ValidationAnnotationProcessor<ValidData, Object> {
+        private final Map<Class, Validator<Object>> validators;
 
-        public AnnotationValidationProcessor(List<Validator<Annotation, Object>> validators) {
+        public ValidDataProcessor(List<Validator<Object>> validators) {
             this.validators = validators.stream().collect(Collectors.toMap(Validator::getClass, Function.identity()));
         }
 
@@ -30,14 +34,13 @@ public @interface ValidData {
 
         @Override
         public boolean isValid(Object data, ValidData annotation) {
-            Validator<Annotation, Object> validator = validators.get(annotation.validator());
-            return validator == null || validator.isValid(data, annotation);
+            Validator<Object> validator = validators.get(annotation.validator());
+            return validator == null || validator.isValid(data);
         }
 
         @Override
         public String getErrorMessage(ValidData annotation) {
-            Validator<Annotation, Object> validator = validators.get(annotation.validator());
-            return validator != null ? validator.getErrorMessage(annotation) : "";
+            return annotation.message();
         }
     }
 }

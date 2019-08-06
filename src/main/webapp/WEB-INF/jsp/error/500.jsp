@@ -3,7 +3,7 @@
 <%@taglib prefix="fun" uri="/WEB-INF/tld/ctl" %>
 
 <tag:page name="Error" hideNavBar="true">
-    <div class="page-wrap d-flex flex-row align-items-center vertical-padding">
+    <div class="page-wrap d-flex flex-row align-items-center vertical-center">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-12 text-center">

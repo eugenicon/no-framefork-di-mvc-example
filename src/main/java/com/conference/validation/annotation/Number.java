@@ -1,4 +1,4 @@
-package com.conference.validation;
+package com.conference.validation.annotation;
 
 import com.conference.Component;
 
@@ -15,7 +15,7 @@ public @interface Number {
     String message();
 
     @Component
-    class AnnotationValidationProcessor implements Validator<Number, Integer> {
+    class NumberProcessor implements ValidationAnnotationProcessor<Number, Integer> {
 
         @Override
         public boolean isValid(Integer data, Number annotation) {

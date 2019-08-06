@@ -6,7 +6,7 @@
 </c:if>
 
 <tag:page name="Login" hideNavBar="true">
-    <div class="row text-center justify-content-center vertical-padding">
+    <div class="row text-center justify-content-center vertical-center">
         <form class="form-group col-4" method="post" action="">
             <img class="mb-4" src="${base}/static/img/accountlogin-icon.png" alt="" width="72" height="72">
             <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
@@ -14,9 +14,18 @@
             <div class="form-group">
                 <label for="userName" class="sr-only">Username</label>
                 <input type="email" id="userName" name="userName" class="form-control" placeholder="Email address" required autofocus value="${item.userName}">
+            </div>
+
+            <div class="form-group">
                 <label for="password" class="sr-only">Password</label>
                 <input type="password" id="password" name="password" class="form-control" placeholder="Password" required value="${item.password}">
             </div>
+
+            <c:if test="${not empty exception}">
+                <div class="alert alert-danger" role="alert">
+                        ${exception.getMessage()}
+                </div>
+            </c:if>
 
             <div class="form-group">
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>

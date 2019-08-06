@@ -1,6 +1,6 @@
 package com.conference.data.dto;
 
-import com.conference.validation.NotEmpty;
+import com.conference.validation.annotation.NotEmpty;
 
 public class UserLoginDto {
     @NotEmpty("Specify user name")

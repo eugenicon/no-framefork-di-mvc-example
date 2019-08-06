@@ -30,7 +30,7 @@ public class DispatcherFilter implements Filter {
         String url = ((HttpServletRequest) request).getRequestURI();
         if (openResources.stream().noneMatch(url::matches)) {
             String mvcUrl = DispatcherServlet.URL + url.substring(contextPath.length());
-            LOGGER.info("Forwarding to {}", url);
+            LOGGER.info("Forwarding to {}{}", contextPath, mvcUrl);
             request.getRequestDispatcher(mvcUrl).forward(request, response);
         } else {
             LOGGER.info("Getting resource {}", url);

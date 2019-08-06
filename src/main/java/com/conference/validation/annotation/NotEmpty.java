@@ -1,4 +1,4 @@
-package com.conference.validation;
+package com.conference.validation.annotation;
 
 import com.conference.Component;
 
@@ -14,7 +14,7 @@ public @interface NotEmpty {
     String value();
 
     @Component
-    class AnnotationValidationProcessor implements Validator<NotEmpty, Object> {
+    class NotEmptyProcessor implements ValidationAnnotationProcessor<NotEmpty, Object> {
 
         @Override
         public boolean isValid(Object data, NotEmpty annotation) {

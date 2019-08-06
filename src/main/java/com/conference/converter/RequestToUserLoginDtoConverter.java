@@ -7,7 +7,7 @@ import com.conference.data.dto.UserLoginDto;
 import javax.servlet.http.HttpServletRequest;
 
 @Component
-public class UserLoginDtoConverter implements Converter<HttpServletRequest, UserLoginDto> {
+public class RequestToUserLoginDtoConverter implements Converter<HttpServletRequest, UserLoginDto> {
 
     @Override
     public UserLoginDto convert(HttpServletRequest request) {

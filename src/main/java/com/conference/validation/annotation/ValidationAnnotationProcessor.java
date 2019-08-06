@@ -1,8 +1,8 @@
-package com.conference.validation;
+package com.conference.validation.annotation;
 
 import java.lang.annotation.Annotation;
 
-public interface Validator<A extends Annotation, T> {
+public interface ValidationAnnotationProcessor<A extends Annotation, T> {
     boolean isValid(T data, A annotation);
 
     String getErrorMessage(A annotation);

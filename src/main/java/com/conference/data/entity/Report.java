@@ -1,7 +1,7 @@
 package com.conference.data.entity;
 
-import com.conference.validation.Matches;
-import com.conference.validation.NotEmpty;
+import com.conference.validation.annotation.Matches;
+import com.conference.validation.annotation.NotEmpty;
 
 import java.util.Date;
 

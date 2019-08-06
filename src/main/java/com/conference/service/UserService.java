@@ -35,4 +35,8 @@ public class UserService {
     public void save(User user) {
         userDao.save(user);
     }
+
+    public Optional<User> findByEmail(String email) {
+        return userDao.findByEmail(email);
+    }
 }
