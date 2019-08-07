@@ -3,6 +3,7 @@ package com.conference.servlet;
 import com.conference.Component;
 import com.conference.servlet.annotation.ExceptionMapping;
 import com.conference.servlet.annotation.GetMapping;
+import com.conference.servlet.annotation.GlobalExceptionMapping;
 import com.conference.servlet.annotation.PostMapping;
 import com.conference.servlet.resolver.RequestResolution;
 import com.conference.servlet.resolver.Resolver;
@@ -33,6 +34,7 @@ public class RequestResolver {
         mappings.put(GetMapping.KEY, new HashMap<>());
         mappings.put(PostMapping.KEY, new HashMap<>());
         mappings.put(ExceptionMapping.KEY, new HashMap<>());
+        mappings.put(GlobalExceptionMapping.KEY, new HashMap<>());
     }
 
     public void register(List<?> controllers, String contextPath) {
@@ -41,6 +43,7 @@ public class RequestResolver {
                 registerMapping(GetMapping.KEY, GetMapping.class, a -> contextPath + a.value(), controller, method);
                 registerMapping(PostMapping.KEY, PostMapping.class, a -> contextPath + a.value(), controller, method);
                 registerMapping(ExceptionMapping.KEY, ExceptionMapping.class, a -> getExceptionMappingKey(controller, a.value()), controller, method);
+                registerMapping(GlobalExceptionMapping.KEY, GlobalExceptionMapping.class, a -> a.value().getSimpleName(), controller, method);
             }
         }
     }
@@ -69,6 +72,9 @@ public class RequestResolver {
                 requestResolution.setException(cause);
                 String exceptionKey = getExceptionMappingKey(resolverRegistry.getController(), cause.getClass());
                 ControllerRegistry resolver = mappings.get(ExceptionMapping.KEY).get(exceptionKey);
+                if (resolver == null) {
+                    resolver = mappings.get(GlobalExceptionMapping.KEY).get(cause.getClass().getSimpleName());
+                }
                 resolveRequest(requestResolution, resolver, resolvers);
             }
         }

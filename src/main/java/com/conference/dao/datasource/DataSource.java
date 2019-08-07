@@ -80,7 +80,7 @@ public class DataSource {
     }
 
     public class QueryBuilder {
-        private Deque<QueryData> queries = new LinkedList<>();
+        private final Deque<QueryData> queries = new LinkedList<>();
 
         public QueryBuilder and(String sql) {
             QueryData queryData = new QueryData();

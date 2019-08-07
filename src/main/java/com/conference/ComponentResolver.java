@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class ComponentResolver {
     private static ComponentResolver instance;
 
-    private Map<Class, Object> componentInstances = new HashMap<>();
+    private final Map<Class, Object> componentInstances = new HashMap<>();
 
     private ComponentResolver() {
         componentInstances.put(Properties.class, ResourceReader.getResourceAsProperties("application.properties"));

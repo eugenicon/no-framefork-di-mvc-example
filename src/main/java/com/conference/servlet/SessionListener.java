@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSessionListener;
 public class SessionListener implements HttpSessionListener {
     private static final Logger LOGGER = LogManager.getLogger(SessionListener.class);
 
-    private AuthenticationService authenticationService = ComponentResolver.getComponent(AuthenticationService.class);
+    private final AuthenticationService authenticationService = ComponentResolver.getComponent(AuthenticationService.class);
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {

@@ -1,11 +1,10 @@
 package com.conference.validation.validator;
 
 import com.conference.Component;
-import com.conference.data.dto.UserRegistrationDto;
 import com.conference.service.UserService;
 
 @Component
-public class UniqueEmailValidator implements Validator<UserRegistrationDto> {
+public class UniqueEmailValidator implements Validator<String> {
     private final UserService userService;
 
     public UniqueEmailValidator(UserService userService) {
@@ -13,7 +12,7 @@ public class UniqueEmailValidator implements Validator<UserRegistrationDto> {
     }
 
     @Override
-    public boolean isValid(UserRegistrationDto data) {
-        return !userService.findByEmail(data.getUserName()).isPresent();
+    public boolean isValid(String email) {
+        return !userService.findByEmail(email).isPresent();
     }
 }

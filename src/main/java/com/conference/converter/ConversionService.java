@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Component
 public class ConversionService {
-    private List<ConversionRegistry> conversionRegistries = new ArrayList<>();
+    private final List<ConversionRegistry> conversionRegistries = new ArrayList<>();
 
     public void register(Converter converter) {
         Method convertMethod = Reflection.getMethod(converter.getClass(), "convert");
@@ -36,9 +36,9 @@ public class ConversionService {
     }
 
     private class ConversionRegistry {
-        private Class incomingType;
-        private Class returnType;
-        private Converter converter;
+        private final Class incomingType;
+        private final Class returnType;
+        private final Converter converter;
 
         private ConversionRegistry(Class incomingType, Class returnType, Converter converter) {
             this.incomingType = incomingType;

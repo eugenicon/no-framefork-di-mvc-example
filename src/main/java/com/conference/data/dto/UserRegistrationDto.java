@@ -3,13 +3,14 @@ package com.conference.data.dto;
 
 import com.conference.validation.annotation.Matches;
 import com.conference.validation.annotation.ValidData;
-import com.conference.validation.validator.UniqueEmailValidator;
+import com.conference.validation.annotation.ValidValue;
 import com.conference.validation.validator.PasswordConfirmationValidator;
+import com.conference.validation.validator.UniqueEmailValidator;
 
 
 public class UserRegistrationDto {
     @Matches(regex = Matches.EMAIL, message = "Username should be valid email")
-    @ValidData(validator = UniqueEmailValidator.class, message = "Email is already in use")
+    @ValidValue(validator = UniqueEmailValidator.class, message = "Email is already in use")
     private String userName;
 
     @Matches(regex = ".{5,}", message = "Password should be at least 5 symbols")
