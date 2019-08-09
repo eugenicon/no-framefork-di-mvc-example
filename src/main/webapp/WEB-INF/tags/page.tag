@@ -21,19 +21,21 @@
     <tag:date-time-picker/>
     <tag:data-table/>
 </head>
-<body>
+<body style="padding-top: 70px;">
 
 <c:if test="${!hideNavBar}">
-    <nav class="navbar navbar-expand navbar-light bg-light">
+    <nav class="navbar navbar-expand navbar-light bg-light fixed-top">
         <a class="navbar-brand" href="#">Navbar</a>
         <div class="navbar-nav">
             <tag:nav-item url="${base}/" label="Home" fullMatch="true"/>
+            <tag:nav-item url="${base}/conferences" label="Conferences"/>
+            <tag:if-role is="ADMIN,MODERATOR">
+                <tag:nav-item url="${base}/reports" label="Reports"/>
+            </tag:if-role>
             <tag:if-role is="ADMIN">
                 <tag:nav-item url="${base}/users" label="Users"/>
                 <tag:nav-item url="${base}/locations" label="Locations"/>
             </tag:if-role>
-            <tag:nav-item url="${base}/conferences" label="Conferences"/>
-            <tag:nav-item url="${base}/reports" label="Reports"/>
         </div>
         <div class="navbar-nav ml-auto">
             <div class="btn-group" >

@@ -21,7 +21,7 @@ public class Conference {
     @Number(min = 1, message = "Conference makes sense with at least 1 ticket")
     private Integer totalTickets;
 
-    @Matches(regex = ".{10,}", message = "Description must be at least 10 symbols")
+    @Matches(regex = "(.|\\s){10,}", message = "Description must be at least 10 symbols")
     private String description;
 
     public Integer getId() {

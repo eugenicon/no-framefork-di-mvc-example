@@ -2,6 +2,7 @@ package com.conference.controller;
 
 import com.conference.Component;
 import com.conference.dao.ConferenceDao;
+import com.conference.dao.ReportDao;
 import com.conference.dao.UserDao;
 import com.conference.data.entity.Conference;
 import com.conference.servlet.View;
@@ -14,10 +15,12 @@ import com.conference.validation.annotation.Valid;
 @Controller
 public class ConferenceController {
     private final ConferenceDao conferenceDao;
+    private final ReportDao reportDao;
     private final UserDao userDao;
 
-    public ConferenceController(ConferenceDao conferenceDao, UserDao userDao) {
+    public ConferenceController(ConferenceDao conferenceDao, ReportDao reportDao, UserDao userDao) {
         this.conferenceDao = conferenceDao;
+        this.reportDao = reportDao;
         this.userDao = userDao;
     }
 
@@ -35,6 +38,22 @@ public class ConferenceController {
     @GetMapping("/conferences/{id}")
     public View showEditPage(Integer id) {
         return showAddPage().with("item", conferenceDao.findById(id));
+    }
+
+    @GetMapping("/conferences/view-{id}")
+    public View showViewPage(Integer id) {
+        return View.of("conference/conference-view.jsp")
+                .with("users", userDao.getAll())
+                .with("reports", reportDao.getAll())
+                .with("item", conferenceDao.findById(id));
+    }
+
+    @GetMapping("/conferences/order/{id}")
+    public String orderTicket(Integer id) {
+        Conference conference = conferenceDao.findById(id);
+        conference.setTotalTickets(conference.getTotalTickets() - 1);
+        conferenceDao.save(conference);
+        return "redirect:/conferences";
     }
 
     @PostMapping("/conferences/save")

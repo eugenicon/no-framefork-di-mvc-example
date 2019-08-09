@@ -5,37 +5,42 @@
 <jsp:useBean id="list" scope="request" type="java.util.List<com.conference.data.entity.Conference>"/>
 
 <tag:page name="Conferences">
-    Conferences list
 
-    <table class="table data-table" id="conferences">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Moderator</th>
-            <th>Tickets</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach var="item" items="${list}">
-            <tr>
-                <td>${item.id}</td>
-                <td>${item.name}</td>
-                <td>${fun:formatWith(item.date, 'MM/dd/yyyy')}</td>
-                <td>${item.moderator.name}
-                <td>${item.totalTickets}
-                    <tag:if-role is="ADMIN">
-                        <tag:table-actions edit="${base}/conferences/${item.id}"
-                                           delete="${base}/conferences/delete/${item.id}"/>
+    <div class="row d-flex justify-content-center">
+    <c:forEach var="item" items="${list}">
+
+        <div class="card item-card toggle-visibility">
+            <div class="card-header jumbotron">
+
+            </div>
+            <div class="card-body">
+                <small class="text-muted">${fun:formatWith(item.date, 'MM/dd/yyyy')}</small>
+                <h4 class="card-title">${item.name}</h4>
+                <h5 class="card-title">${item.totalTickets} <small class="text-muted"> tickets left</small></h5>
+            </div>
+
+            <div class="overlay text-center fill">
+                <div style="display: flex; flex-direction: column; padding: 10px; justify-content: center; height: 170px;">
+                    <a href="${base}/conferences/view-${item.id}" class="btn btn-lg btn-white">View</a>
+                    <tag:if-role is="ADMIN,MODERATOR">
+                        <a href="${base}/conferences/${item.id}" class="btn btn-lg btn-white">Edit</a>
+                        <a href="#" class="confirm-action btn btn-lg btn-white" onclick="post('${base}/conferences/delete/${item.id}')">Delete</a>
                     </tag:if-role>
-                </td>
-            </tr>
-        </c:forEach>
-        </tbody>
+                </div>
 
-        <tag:if-role is="ADMIN,MODERATOR">
-            <a class="data-table-menu dropdown-item" href="${base}/conferences/add">Add</a>
-        </tag:if-role>
-    </table>
+                <div style="color: wheat; text-align: left; position: absolute; top: 181px; left: 20px;">
+                    <small >${fun:formatWith(item.date, 'MM/dd/yyyy')}</small>
+                    <h4 class="card-title">${item.name}</h4>
+                    <h5 class="card-title">${item.totalTickets} <small > tickets left</small></h5>
+                </div>
+            </div>
+        </div>
+
+    </c:forEach>
+    </div>
+
+    <tag:if-role is="ADMIN,MODERATOR">
+        <a class="floating-corner btn btn-primary" href="${base}/conferences/add" >Add</a>
+    </tag:if-role>
+
 </tag:page>

@@ -32,6 +32,7 @@ public class Reflection {
         }
     }
 
+    @SafeVarargs
     public static List<Class> getClasses(String packageName, Class<? extends Annotation>... annotations) {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         String packageUrl = packageName.replace(".", File.separator);

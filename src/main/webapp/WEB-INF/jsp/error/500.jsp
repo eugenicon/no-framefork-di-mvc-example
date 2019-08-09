@@ -20,7 +20,7 @@
                 </div>
                 <c:if test="${exception != null}">
                     <div id="exception-stack-trace" class="panel-collapse collapse">
-                        <div class="card card-body overflow-auto" style="white-space: pre-line; max-height: 350px;">${fun:stacktrace(exception)}</div>
+                        <div class="card card-body overflow-auto pre-line" style="max-height: 315px;">${fun:stacktrace(exception)}</div>
                     </div>
                 </c:if>
             </div>
