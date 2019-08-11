@@ -52,7 +52,7 @@ class ConferenceControllerTest {
         when(conferenceService.getAll()).thenReturn(conferences);
         when(conferenceService.findById(validId)).thenReturn(conference);
         when(conferenceService.viewById(validId)).thenReturn(conferenceDto);
-        when(reportDao.getAll()).thenReturn(reports);
+        when(reportDao.findAllByConferenceId(anyInt())).thenReturn(reports);
         when(userDao.getAll()).thenReturn(users);
         when(userDao.findByEmail(validEmail)).thenReturn(Optional.ofNullable(mock(User.class)));
     }
@@ -97,7 +97,7 @@ class ConferenceControllerTest {
     @Test
     void save() {
         String actual = conferenceController.save(conference);
-        assertEquals("redirect:/conferences", actual);
+        assertEquals("redirect:/conferences/view-" + conference.getId(), actual);
         verify(conferenceService).save(conference);
     }
 

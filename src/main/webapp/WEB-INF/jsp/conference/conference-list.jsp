@@ -40,7 +40,7 @@
     </div>
 
     <tag:if-role is="ADMIN,MODERATOR">
-        <a class="floating-corner btn btn-primary" href="${base}/conferences/add" >Add</a>
+        <a class="floating-bottom-corner btn btn-primary" href="${base}/conferences/add" >Add</a>
     </tag:if-role>
 
 </tag:page>

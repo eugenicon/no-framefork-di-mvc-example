@@ -8,6 +8,9 @@ import java.util.Date;
 public class Report {
     private Integer id;
 
+    @NotEmpty("You must specify the conference")
+    private Integer conferenceId;
+
     @NotEmpty("You must specify the theme")
     private String theme;
 
@@ -80,5 +83,13 @@ public class Report {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public Integer getConferenceId() {
+        return conferenceId;
+    }
+
+    public void setConferenceId(Integer conferenceId) {
+        this.conferenceId = conferenceId;
     }
 }

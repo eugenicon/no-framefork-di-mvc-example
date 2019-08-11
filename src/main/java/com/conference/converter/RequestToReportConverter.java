@@ -24,6 +24,7 @@ public class RequestToReportConverter implements Converter<HttpServletRequest, R
     public Report convert(HttpServletRequest req) {
         Report report = new Report();
         report.setId(conversionService.convert(req.getParameter("id"), Integer.class));
+        report.setConferenceId(conversionService.convert(req.getParameter("conferenceId"), Integer.class));
         report.setTheme(req.getParameter("theme"));
         Integer locationId = conversionService.convert(req.getParameter("place"), Integer.class);
         if (locationId != null) {

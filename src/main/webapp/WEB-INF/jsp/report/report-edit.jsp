@@ -3,6 +3,7 @@
 <%@taglib prefix="fun" uri="/WEB-INF/tld/ctl" %>
 
 <c:if test="">
+    <jsp:useBean id="conferenceId" type="java.lang.Integer" />
     <jsp:useBean id="item" type="com.conference.data.entity.Report" />
     <jsp:useBean id="locations" type="java.util.List<com.conference.data.entity.Location>" />
     <jsp:useBean id="users" type="java.util.List<com.conference.data.entity.User>" />
@@ -13,6 +14,7 @@
 
     <form method="post" action="${base}/reports/save" class="form" role="form">
         <input type="hidden" id="id" name="id" value="${item.id}">
+        <input type="hidden" id="conferenceId" name="conferenceId" value="${conferenceId}">
         <div class="form-group">
             <label for="theme">Theme:</label>
             <input type="text" class="form-control" id="theme" name="theme" placeholder="Specify theme" value="${item.theme}">

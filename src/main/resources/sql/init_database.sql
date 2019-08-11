@@ -20,6 +20,7 @@ create table if not exists reports
     theme       varchar(250) NOT NULL,
     place       int8 references locations,
     reporter    int8 references users,
+    conference  int8 references conferences,
     startTime   timestamp    NOT NULL,
     endTime     timestamp    NOT NULL,
     description varchar(500) NOT NULL

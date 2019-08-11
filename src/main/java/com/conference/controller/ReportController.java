@@ -30,15 +30,17 @@ public class ReportController {
     }
 
     @GetMapping("/reports/add")
-    public View showAddPage() {
+    public View showAddPage(Integer conf) {
         return View.of("report/report-edit.jsp")
                 .with("locations", locationDao.getAll())
+                .with("conferenceId", conf)
                 .with("users", userDao.getAll());
     }
 
     @GetMapping("/reports/{id}")
     public View showEditPage(Integer id) {
-        return showAddPage().with("item", reportDao.findById(id));
+        Report report = reportDao.findById(id);
+        return showAddPage(report.getConferenceId()).with("item", report);
     }
 
     @PostMapping("/reports/save")

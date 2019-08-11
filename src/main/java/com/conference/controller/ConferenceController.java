@@ -52,7 +52,7 @@ public class ConferenceController {
     @GetMapping("/conferences/view-{id}")
     public View showViewPage(Integer id) {
         return View.of("conference/conference-view.jsp")
-                .with("reports", reportDao.getAll())
+                .with("reports", reportDao.findAllByConferenceId(id))
                 .with("item", conferenceService.viewById(id));
     }
 
@@ -71,7 +71,7 @@ public class ConferenceController {
     @PostMapping("/conferences/save")
     public String save(@Valid Conference entity) {
         conferenceService.save(entity);
-        return "redirect:/conferences";
+        return "redirect:/conferences/view-" + entity.getId();
     }
 
     @PostMapping("/conferences/delete/{id}")

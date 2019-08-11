@@ -11,6 +11,7 @@
         <thead>
         <tr>
             <th>#</th>
+            <th>Conference</th>
             <th>Theme</th>
             <th>Place</th>
             <th>Reporter</th>
@@ -22,6 +23,9 @@
         <c:forEach var="item" items="${list}">
             <tr>
                 <td>${item.id}</td>
+                <td>
+                    <a href="${base}/conferences/view-${item.conferenceId}">${item.conferenceId}</a>
+                </td>
                 <td>${item.theme}</td>
                 <td>${item.place.name}</td>
                 <td>${item.reporter.name}
@@ -36,8 +40,4 @@
         </c:forEach>
         </tbody>
     </table>
-
-    <tag:if-role is="ADMIN,MODERATOR">
-        <a class="data-table-menu dropdown-item" href="${base}/reports/add">Add</a>
-    </tag:if-role>
 </tag:page>

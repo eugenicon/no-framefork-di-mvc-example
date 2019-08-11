@@ -60,9 +60,15 @@ tr:hover .table-options {
     white-space: pre-line;
 }
 
-.floating-corner {
+.floating-bottom-corner {
     position: fixed;
     bottom: 45px;
+    right: 45px;
+}
+
+.floating-top-corner {
+    position: fixed;
+    top: 70px;
     right: 45px;
 }
 
@@ -90,6 +96,16 @@ tr:hover .table-options {
 .btn-white:hover {
     background-color: #fff;
     color: #222;
+}
+
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
 }
 
 .carousel-item {

@@ -2,6 +2,7 @@ package com.conference.dao;
 
 import com.conference.Component;
 import com.conference.dao.datasource.DataSource;
+import com.conference.data.entity.Order;
 import com.conference.data.entity.Report;
 
 import java.sql.PreparedStatement;
@@ -51,14 +52,20 @@ public class ReportDao implements Dao<Report> {
                 .execute();
     }
 
+    public List<Report> findAllByConferenceId(Integer id) {
+        return dataSource.query("select * from reports where conference = ?")
+                .prepare(ps -> ps.setInt(1, id))
+                .list(this::convert);
+    }
+
     private void add(Report entity) {
-        dataSource.query("insert into reports (theme,place,reporter,startTime,endTime,description) values(?,?,?,?,?,?)")
+        dataSource.query("insert into reports (theme,place,reporter,conference,startTime,endTime,description) values(?,?,?,?,?,?,?)")
                 .prepare(ps -> prepare(entity, ps, false))
                 .execute(rs -> entity.setId(rs.getInt(1)));
     }
 
     private void update(Report entity) {
-        dataSource.query("update reports set theme = ?,place = ?,reporter = ?,startTime = ?,endTime = ?,description = ? where id = ?")
+        dataSource.query("update reports set theme = ?,place = ?,reporter = ?,conference = ?,startTime = ?,endTime = ?,description = ? where id = ?")
                 .prepare(ps -> prepare(entity, ps, true))
                 .execute();
     }
@@ -67,17 +74,19 @@ public class ReportDao implements Dao<Report> {
         ps.setString(1, entity.getTheme());
         ps.setInt(2, entity.getPlace().getId());
         ps.setInt(3, entity.getReporter().getId());
-        ps.setTimestamp(4, new Timestamp(entity.getStartTime().getTime()));
-        ps.setTimestamp(5, new Timestamp(entity.getEndTime().getTime()));
-        ps.setString(6, entity.getDescription());
+        ps.setInt(4, entity.getConferenceId());
+        ps.setTimestamp(5, new Timestamp(entity.getStartTime().getTime()));
+        ps.setTimestamp(6, new Timestamp(entity.getEndTime().getTime()));
+        ps.setString(7, entity.getDescription());
         if (isUpdate) {
-            ps.setInt(7, entity.getId());
+            ps.setInt(8, entity.getId());
         }
     }
 
     private Report convert(ResultSet rs) throws SQLException {
         Report entity = new Report();
         entity.setId(rs.getInt("id"));
+        entity.setConferenceId(rs.getInt("conference"));
         entity.setTheme(rs.getString("theme"));
         entity.setPlace(locationDao.findById(rs.getInt("place")));
         entity.setReporter(userDao.findById(rs.getInt("reporter")));
