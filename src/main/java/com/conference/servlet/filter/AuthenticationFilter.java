@@ -27,7 +27,7 @@ public class AuthenticationFilter implements Filter {
         final HttpSession session = httpRequest.getSession();
 
         if (authenticationService.isLoginRequest(httpRequest)) {
-            String userId = authenticationService.getUserId(httpRequest);
+            String userId = authenticationService.verifyUserId(httpRequest);
             LOGGER.debug("verify auth on {} for {}", httpRequest.getRequestURI(), userId.isEmpty() ? "[UNKNOWN USER]" : userId);
             if (authenticationService.isUserHasOtherOpenSessions(userId, session)) {
                 authenticationService.finishUserSessions(userId, session);

@@ -46,10 +46,16 @@ public class AuthenticationService {
         return (Map<String, AuthenticatedUser>) servletContext.getAttribute(ALL_AUTH);
     }
 
-    public String getUserId(HttpServletRequest httpRequest) {
-        return Optional.ofNullable(httpRequest.getParameter("userName"))
-                .orElseGet(() -> getAuthentication(httpRequest.getSession())
-                        .map(AuthenticatedUser::getName).orElse(""));
+    public String verifyUserId(HttpServletRequest httpRequest) {
+        HttpSession session = httpRequest.getSession();
+        String userId = Optional.ofNullable(httpRequest.getParameter("userName"))
+                .orElseGet(() -> getAuthentication(session)
+                        .map(AuthenticatedUser::getEmail).orElse(""));
+        AuthenticatedUser auth = (AuthenticatedUser) session.getAttribute(AUTH);
+        if (auth != null && !auth.getEmail().equals(userId)) {
+            resetAuthentication(session);
+        }
+        return userId;
     }
 
     public boolean isUserHasOtherOpenSessions(String userId, HttpSession session) {
@@ -74,12 +80,12 @@ public class AuthenticationService {
 
     private List<String> getAuthenticatedUserSessions(String key, ServletContext context) {
         return getAuthentications(context).entrySet().stream()
-                .filter(e -> e.getValue().getName().equals(key) || e.getKey().equals(key))
+                .filter(e -> e.getValue().getEmail().equals(key) || e.getKey().equals(key))
                 .map(Map.Entry::getKey).collect(Collectors.toList());
     }
 
     public boolean isUserSessionStarted(String userId, HttpSession session) {
-        return getAuthentication(session).filter(a -> a.getName().equals(userId)).isPresent();
+        return getAuthentication(session).filter(a -> a.getEmail().equals(userId)).isPresent();
     }
 
     public void startUserSession(HttpServletRequest httpRequest) {
@@ -89,8 +95,8 @@ public class AuthenticationService {
         httpRequest.getSession().setAttribute(AUTH, auth);
     }
 
-    public void login(HttpSession session, String userName, String password) throws ServiceException {
-        User user = userService.findMatchingCredentials(userName, password).orElseThrow(() -> new ServiceException("Invalid username or password"));
+    public void login(HttpSession session, String email, String password) throws ServiceException {
+        User user = userService.findMatchingCredentials(email, password).orElseThrow(() -> new ServiceException("Invalid username or password"));
         AuthenticatedUser auth = getAuthentication(session).orElseThrow(() -> new ServiceException("Authentication error"));
         auth.setId(user.getId());
         auth.setEmail(user.getEmail());
@@ -100,7 +106,7 @@ public class AuthenticationService {
     }
 
     public void logout(HttpSession session) {
-        getAuthentication(session).ifPresent(auth -> finishUserSessions(auth.getName(), session));
+        getAuthentication(session).ifPresent(auth -> finishUserSessions(auth.getEmail(), session));
         LOGGER.debug("logout for session session: {}", session.getId());
     }
 

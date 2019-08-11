@@ -4,6 +4,9 @@
 <%@attribute name="hideNavBar" %>
 
 <c:set var="base" value="${pageContext.request.contextPath}" scope="application"/>
+<c:if test="">
+    <jsp:useBean id="auth" type="com.conference.service.AuthenticatedUser" />
+</c:if>
 
 <html>
 <head>
@@ -41,6 +44,11 @@
             </tag:if-role>
         </div>
         <div class="navbar-nav ml-auto">
+
+            <tag:if-role isNot="UNKNOWN">
+                <div style="margin: 7px;">${auth.name}</div>
+            </tag:if-role>
+
             <div class="btn-group" >
                 <tag:if-role is="UNKNOWN">
                     <a class="btn btn-outline-secondary" href="${base}/register">Sign up</a>
