@@ -11,9 +11,18 @@
         var dataTables = $('.data-table');
         dataTables.each(function () {
             var table = $(this);
-            table.dataTable({
+
+            var options = {
                 "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
-            });
+            };
+
+            var order = table.attr('order');
+            if (order) {
+                var strings = order.split('-');
+                options["order"] = [[ +strings[0], strings[1] ]];
+            }
+
+            table.dataTable(options);
 
             var menuItems = $('.data-table-menu');
             if (menuItems.length) {

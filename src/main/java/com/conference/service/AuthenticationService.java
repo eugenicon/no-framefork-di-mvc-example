@@ -92,6 +92,8 @@ public class AuthenticationService {
     public void login(HttpSession session, String userName, String password) throws ServiceException {
         User user = userService.findMatchingCredentials(userName, password).orElseThrow(() -> new ServiceException("Invalid username or password"));
         AuthenticatedUser auth = getAuthentication(session).orElseThrow(() -> new ServiceException("Authentication error"));
+        auth.setId(user.getId());
+        auth.setEmail(user.getEmail());
         auth.setName(user.getName());
         auth.setRole(user.getRole());
         LOGGER.debug("login user {}, session: {}, role: {}",  auth.getName(), session.getId(), auth.getRole());

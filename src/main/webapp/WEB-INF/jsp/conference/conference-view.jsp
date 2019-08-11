@@ -3,7 +3,7 @@
 <%@taglib prefix="fun" uri="/WEB-INF/tld/ctl" %>
 
 <c:if test="">
-    <jsp:useBean id="item" type="com.conference.data.entity.Conference"/>
+    <jsp:useBean id="item" type="com.conference.data.dto.ConferenceDto"/>
     <jsp:useBean id="users" type="java.util.List<com.conference.data.entity.User>"/>
     <jsp:useBean id="reports" type="java.util.List<com.conference.data.entity.Report>"/>
 </c:if>
@@ -21,14 +21,14 @@
                     <h4 class="my-0 font-weight-normal">${item.date}</h4>
                 </div>
                 <div class="card-body">
-                    <h1 class="card-title">${item.totalTickets} <small class="text-muted"> tickets left</small></h1>
+                    <h1 class="card-title">${item.remainingTickets} <small class="text-muted"> tickets left</small></h1>
                     <ul class="list-unstyled mt-3 mb-4">
-                        <li>${item.totalTickets} users already going</li>
+                        <li>${item.purchasedTickets} users already going</li>
                     </ul>
-                    <c:if test="${item.totalTickets > 0}">
+                    <c:if test="${item.totalTickets > item.purchasedTickets}">
                         <p><a class="btn btn-lg btn-success" href="${base}/conferences/order/${item.id}" role="button" >Order Ticket</a></p>
                     </c:if>
-                    <c:if test="${item.totalTickets == 0}">
+                    <c:if test="${item.totalTickets == item.purchasedTickets}">
                         <p><a class="btn btn-lg btn-block border-info" role="button" >Sold Out!</a></p>
                     </c:if>
                 </div>

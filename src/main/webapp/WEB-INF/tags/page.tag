@@ -36,6 +36,9 @@
                 <tag:nav-item url="${base}/users" label="Users"/>
                 <tag:nav-item url="${base}/locations" label="Locations"/>
             </tag:if-role>
+            <tag:if-role isNot="UNKNOWN">
+                <tag:nav-item url="${base}/orders" label="My Orders"/>
+            </tag:if-role>
         </div>
         <div class="navbar-nav ml-auto">
             <div class="btn-group" >

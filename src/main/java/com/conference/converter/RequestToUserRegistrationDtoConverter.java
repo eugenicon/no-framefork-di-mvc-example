@@ -6,7 +6,7 @@ import com.conference.data.dto.UserRegistrationDto;
 import javax.servlet.http.HttpServletRequest;
 
 @Component
-public class RequestUserRegistrationDtoTransformer implements Converter<HttpServletRequest, UserRegistrationDto> {
+public class RequestToUserRegistrationDtoConverter implements Converter<HttpServletRequest, UserRegistrationDto> {
 
     @Override
     public UserRegistrationDto convert(HttpServletRequest request) {

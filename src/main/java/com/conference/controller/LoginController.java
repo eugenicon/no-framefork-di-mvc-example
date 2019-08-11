@@ -30,9 +30,9 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid UserLoginDto userLogin, HttpSession session) throws ServiceException {
+    public String login(@Valid UserLoginDto userLogin, HttpSession session, String redirectUrl) throws ServiceException {
         authenticationService.login(session, userLogin.getUserName(), userLogin.getPassword());
-        return "redirect:/";
+        return "redirect:" + (redirectUrl != null ? redirectUrl : "/");
     }
 
     @GetMapping("/logout")

@@ -54,7 +54,7 @@ public class AuthorizationFilter implements Filter {
                 filterChain.doFilter(servletRequest, servletResponse);
             } else {
                 LOGGER.debug("user with role {} redirected to {}", role, redirectUrl);
-                ((HttpServletResponse) servletResponse).sendRedirect(redirectUrl);
+                ((HttpServletResponse) servletResponse).sendRedirect(redirectUrl + "?redirectUrl=" + httpRequest.getServletPath());
             }
         }
     }

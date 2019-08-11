@@ -34,3 +34,11 @@ create table if not exists conferences
     totalTickets int8,
     description  varchar(500) NOT NULL
 );
+
+create table if not exists orders
+(
+    id         SERIAL NOT NULL PRIMARY KEY,
+    owner      int8 references users,
+    conference int8 references conferences,
+    date       timestamp
+);

@@ -2,7 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fun" uri="/WEB-INF/tld/ctl" %>
 
-<jsp:useBean id="list" scope="request" type="java.util.List<com.conference.data.entity.Conference>"/>
+<jsp:useBean id="list" scope="request" type="java.util.List<com.conference.data.dto.ConferenceDto>"/>
 
 <tag:page name="Conferences">
 
@@ -16,7 +16,7 @@
             <div class="card-body">
                 <small class="text-muted">${fun:formatWith(item.date, 'MM/dd/yyyy')}</small>
                 <h4 class="card-title">${item.name}</h4>
-                <h5 class="card-title">${item.totalTickets} <small class="text-muted"> tickets left</small></h5>
+                <h5 class="card-title">${item.remainingTickets} <small class="text-muted"> tickets left</small></h5>
             </div>
 
             <div class="overlay text-center fill">
@@ -31,7 +31,7 @@
                 <div style="color: wheat; text-align: left; position: absolute; top: 181px; left: 20px;">
                     <small >${fun:formatWith(item.date, 'MM/dd/yyyy')}</small>
                     <h4 class="card-title">${item.name}</h4>
-                    <h5 class="card-title">${item.totalTickets} <small > tickets left</small></h5>
+                    <h5 class="card-title">${item.remainingTickets} <small > tickets left</small></h5>
                 </div>
             </div>
         </div>
