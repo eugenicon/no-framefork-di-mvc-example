@@ -14,16 +14,18 @@ import java.util.*;
 @Component
 public class DataSource {
     private static final Logger LOGGER = LogManager.getLogger(DataSource.class);
+    private final QueryCache queryCache;
     private final String userName;
     private final String password;
     private final String url;
 
-    public DataSource(Properties properties) throws ClassNotFoundException {
+    public DataSource(Properties properties, QueryCache queryCache) throws ClassNotFoundException {
         Class.forName(properties.getProperty("jdbc.driver"));
 
         url = properties.getProperty("jdbc.url");
         userName = properties.getProperty("jdbc.user");
         password = properties.getProperty("jdbc.password");
+        this.queryCache = queryCache;
     }
 
     private Connection getConnection() throws SQLException {
@@ -42,13 +44,22 @@ public class DataSource {
                     }
                 }
             }
-            LOGGER.debug(ps);
-            if (queryData.query.toUpperCase().startsWith("SELECT")) {
+            boolean isSelectQuery = queryData.query.toUpperCase().startsWith("SELECT");
+            String query = ps.toString();
+
+            List<T> cachedResult = queryCache.getQueryResult(query);
+            if (cachedResult != null) {
+                return cachedResult;
+            }
+
+            LOGGER.debug(query);
+            if (isSelectQuery) {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         list.add((T) queryData.converter.apply(rs));
                     }
                 }
+                queryCache.cacheQueryResult(query, list);
             } else {
                 if (useBatch) {
                     ps.executeBatch();

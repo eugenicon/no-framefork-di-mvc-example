@@ -49,6 +49,12 @@ public class ComponentResolver {
                 args[i] = classList.stream().map(c -> resolveComponentInstance(declaredComponentClasses, c)).collect(Collectors.toList());
             } else if (componentInstances.containsKey(parameterType) || declaredComponentClasses.contains(parameterType)) {
                 args[i] = resolveComponentInstance(declaredComponentClasses, parameterType);
+            } else {
+                args[i] = declaredComponentClasses.stream()
+                        .filter(parameterType::isAssignableFrom)
+                        .findFirst()
+                        .map(c -> resolveComponentInstance(declaredComponentClasses, c))
+                        .orElse(null);
             }
         }
         try {

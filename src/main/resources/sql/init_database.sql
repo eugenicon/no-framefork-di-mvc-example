@@ -32,7 +32,7 @@ create table if not exists conferences
     date         timestamp    NOT NULL,
     moderator    int8 references users,
     totalTickets int8,
-    description  varchar(500) NOT NULL
+    description  varchar(2000) NOT NULL
 );
 
 create table if not exists orders
