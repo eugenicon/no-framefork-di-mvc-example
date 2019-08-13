@@ -14,6 +14,16 @@ create table if not exists users
     role     varchar(250) NOT NULL
 );
 
+create table if not exists conferences
+(
+    id           SERIAL       NOT NULL PRIMARY KEY,
+    name         varchar(250) NOT NULL,
+    date         timestamp    NOT NULL,
+    moderator    int8 references users,
+    totalTickets int8,
+    description  varchar(2000) NOT NULL
+);
+
 create table if not exists reports
 (
     id          SERIAL       NOT NULL PRIMARY KEY,
@@ -24,16 +34,6 @@ create table if not exists reports
     startTime   timestamp    NOT NULL,
     endTime     timestamp    NOT NULL,
     description varchar(500) NOT NULL
-);
-
-create table if not exists conferences
-(
-    id           SERIAL       NOT NULL PRIMARY KEY,
-    name         varchar(250) NOT NULL,
-    date         timestamp    NOT NULL,
-    moderator    int8 references users,
-    totalTickets int8,
-    description  varchar(2000) NOT NULL
 );
 
 create table if not exists orders
